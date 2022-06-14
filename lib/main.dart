@@ -92,7 +92,7 @@ class _MainAppBuilderState extends ConsumerState<MainAppBuilder> {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snap) {
         if (snap.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator.adaptive());
         } else if (snap.hasData) {
           sendUser();
           return const HomeDrawer();
