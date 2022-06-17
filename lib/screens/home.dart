@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hci_customer/addons/responsive.dart';
 import '../models/category.dart';
 import '../models/drugs.dart';
 import '../widgets/btnDrug.dart';
@@ -39,6 +40,7 @@ class HomeScreen extends ConsumerWidget {
           List<Drug> listDrug = snapshot.data!.docs
               .map((e) => Drug.fromMap(e.data() as Map<String, dynamic>))
               .toList();
+          ref.read(listDrugDataProvider.notifier).state = listDrug;
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () => showSearchDialog(size, context, listDrug),
@@ -76,7 +78,7 @@ class HomeScreen extends ConsumerWidget {
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (_, __, ___) {
-        return SearchDialog(list: list);
+        return const SearchDialog();
       },
       transitionBuilder: (_, anim, __, child) {
         Tween<Offset> tween;
@@ -101,8 +103,12 @@ class HomeScreen extends ConsumerWidget {
       BuildContext context, bool isPhone, Size size, List<Drug> list) {
     final listA1 = list.where((e) => e.type == 'A1').toList();
     final listA2 = list.where((e) => e.type == 'A2').toList();
+    list.shuffle();
     return Column(
       children: [
+        _toLoadMoreScreen(context, listA1, 'Near Me'),
+        const SizedBox(height: 10),
+        buildSmallGrid(isPhone, list),
         _toLoadMoreScreen(context, listA1, 'Unprescribed Drugs'),
         const SizedBox(height: 10),
         buildSmallGrid(isPhone, listA1),
@@ -139,9 +145,13 @@ class HomeScreen extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: GridView(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 3,
+            childAspectRatio: Responsive.isDesktop(context)
+                ? 15
+                : Responsive.isMobile(context)
+                    ? 4
+                    : 5,
             crossAxisSpacing: 5,
             mainAxisSpacing: 5),
         physics: const NeverScrollableScrollPhysics(),

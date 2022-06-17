@@ -79,7 +79,6 @@ class CartListNotifier extends StateNotifier<List<Cart>> {
   }
 
   void removeCartAt(Cart cart) {
-    print('remove');
     state = [
       for (final e in state)
         if (e != cart) e,

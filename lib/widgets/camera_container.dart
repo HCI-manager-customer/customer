@@ -26,9 +26,7 @@ class _CameraDrugState extends ConsumerState<CameraDrug> {
       setState(() {
         this.image = imageTemp;
       });
-    } on PlatformException catch (e) {
-      print('Fail to pick IMG: $e');
-    }
+    } on PlatformException {}
   }
 
   Future takePicture() async {
@@ -39,9 +37,7 @@ class _CameraDrugState extends ConsumerState<CameraDrug> {
       setState(() {
         this.image = imageTemp;
       });
-    } on PlatformException catch (e) {
-      print('Fail to pick IMG: $e');
-    }
+    } on PlatformException {}
   }
 
   @override

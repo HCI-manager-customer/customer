@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hci_customer/addons/responsive.dart';
 
 import '../provider/general_provider.dart';
 import '../screens/info.dart';
@@ -19,6 +20,16 @@ class CartTile extends ConsumerWidget {
     countController.text =
         ref.watch(cartLProvider).elementAt(index).quantity.toString();
     Size size = MediaQuery.of(context).size;
+    final imgHei = Responsive.isDesktop(context)
+        ? 120
+        : Responsive.isTablet(context)
+            ? 80
+            : size.height * 0.1;
+    final imgWid = Responsive.isDesktop(context)
+        ? 200
+        : Responsive.isTablet(context)
+            ? 150
+            : size.width * 0.4;
     return Container(
         height: size.height * 0.2,
         width: size.width,
@@ -36,11 +47,10 @@ class CartTile extends ConsumerWidget {
                 children: [
                   SizedBox(
                     child: Image.network(
-                      height: size.height * 0.1,
-                      width: size.width * 0.4,
-                      cacheHeight: 100,
+                      height: imgHei.toDouble(),
+                      width: imgWid.toDouble(),
                       cart.drug.imgUrl,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
                         return const Center(
@@ -75,7 +85,7 @@ class CartTile extends ConsumerWidget {
                         ),
                       ),
                       TextSpan(
-                        text: " ${cart.drug.rating}",
+                        text: " ${cart.drug.rating.toStringAsFixed(1)}",
                         style:
                             const TextStyle(color: Colors.black, fontSize: 16),
                       ),

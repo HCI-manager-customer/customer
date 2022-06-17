@@ -61,7 +61,6 @@ class _MainAppBuilderState extends ConsumerState<MainAppBuilder> {
   Future<void> sendUser() async {
     final u = FirebaseAuth.instance.currentUser!;
     final phone = u.phoneNumber ?? 0;
-    print(u.displayName);
     var user = PharmacyUser(
         mail: u.email,
         name: u.displayName,

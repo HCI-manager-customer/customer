@@ -4,20 +4,12 @@ import 'package:hci_customer/screens/home.dart';
 import 'package:hci_customer/screens/presciption_screen.dart';
 
 import '../models/category.dart';
-import '../models/drugs.dart';
 import '../screens/load_more.dart';
 
 class ButtonDrug extends ConsumerWidget {
   const ButtonDrug(this.cat);
 
   final Category cat;
-
-  List<Drug> getType(String type, WidgetRef ref) {
-    return ref
-        .watch(listDrugDataProvider)
-        .where((e) => e.type == type)
-        .toList();
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,8 +20,12 @@ class ButtonDrug extends ConsumerWidget {
           if (cat.type == 'camera') {
             return const PrescriptionScreen();
           } else {
-            return LoadMoreScreen(
-                title: cat.title, list: getType(cat.type, ref));
+            final list = ref
+                .watch(listDrugDataProvider)
+                .where((e) => e.type == cat.type)
+                .toList();
+            print(list.length);
+            return LoadMoreScreen(title: cat.title, list: list);
           }
         }),
       ),

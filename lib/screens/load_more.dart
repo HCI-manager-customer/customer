@@ -5,6 +5,7 @@ import 'package:hci_customer/settings.dart';
 
 import '../models/drugs.dart';
 import '../widgets/product_tile.dart';
+import 'search_dialog.dart';
 
 class LoadMoreScreen extends StatefulWidget {
   const LoadMoreScreen({
@@ -41,27 +42,31 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
 
   Widget gridBuilder(Size size) {
     int count = (size.width / 300).ceil();
-    return AnimationLimiter(
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: count,
-          mainAxisExtent: 256,
-          mainAxisSpacing: 5,
-        ),
-        itemCount: filterlist.length,
-        itemBuilder: (context, i) {
-          return AnimationConfiguration.staggeredGrid(
-            position: i,
-            columnCount: count,
-            duration: const Duration(milliseconds: 700),
-            child: ScaleAnimation(
-              child: FadeInAnimation(
-                child: DrugTile(filterlist[i]),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: AnimationLimiter(
+        child: GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: count,
+            mainAxisExtent: 256,
+            mainAxisSpacing: 5,
+            crossAxisSpacing: 40,
+          ),
+          itemCount: filterlist.length,
+          itemBuilder: (context, i) {
+            return AnimationConfiguration.staggeredGrid(
+              position: i,
+              columnCount: count,
+              duration: const Duration(milliseconds: 700),
+              child: ScaleAnimation(
+                child: FadeInAnimation(
+                  child: DrugTile(filterlist[i]),
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -133,6 +138,11 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
                 ],
               ),
               child: CupertinoTextField(
+                suffix: IconButton(
+                    onPressed: () {
+                      showSearchDialog(size, context);
+                    },
+                    icon: const Icon(Icons.manage_search_outlined)),
                 onChanged: (value) {
                   if (value.isEmpty) {
                     setState(() {
@@ -175,6 +185,35 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
     );
   }
 
+  void showSearchDialog(Size size, BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Barrier",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (_, __, ___) {
+        return const SearchDialog();
+      },
+      transitionBuilder: (_, anim, __, child) {
+        Tween<Offset> tween;
+        if (anim.status == AnimationStatus.reverse) {
+          tween = Tween(begin: const Offset(-1, 0), end: Offset.zero);
+        } else {
+          tween = Tween(begin: const Offset(1, 0), end: Offset.zero);
+        }
+
+        return SlideTransition(
+          position: tween.animate(anim),
+          child: FadeTransition(
+            opacity: anim,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -184,7 +223,8 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
         headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
           return <Widget>[createSilverAppBar1(), createSilverAppBar2(context)];
         },
-        body: SizedBox(
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           width: double.infinity,
           child: gridBuilder(size),
         ),

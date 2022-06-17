@@ -117,7 +117,6 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     nameCtl.text = u.name!;
     phoneCtl.text = u.phone ?? '0';
     addressCtl.text = u.addr!;
-    print('rebuild');
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
