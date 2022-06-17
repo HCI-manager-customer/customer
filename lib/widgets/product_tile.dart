@@ -15,7 +15,7 @@ class DrugTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double containerWidth = 170;
+    double containerWidth = 300;
 
     return Column(
       children: [
