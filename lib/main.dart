@@ -1,15 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hci_customer/models/user.dart';
-import 'package:hci_customer/screens/nearby.dart';
-import 'package:hci_customer/screens/payment.dart';
+import 'package:hci_customer/screens/misc/nearby.dart';
+import 'package:hci_customer/screens/payment/payment.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'controllers/drug_controller.dart';
 import 'firebase_options.dart';
 import 'provider/general_provider.dart';
-import 'screens/home_drawer.dart';
+import 'screens/home/home_drawer.dart';
 import 'screens/login_sceen.dart';
 
 void main() async {
@@ -17,6 +20,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final DrugController drugController = Get.put(DrugController());
   runApp(const ProviderScope(child: MyApp()));
 }
 

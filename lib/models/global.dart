@@ -5,8 +5,8 @@ import 'package:hci_customer/models/user.dart';
 import 'package:intl/intl.dart';
 
 import '../provider/general_provider.dart';
-import '../screens/cart_screen.dart';
-import '../screens/presciption_screen.dart';
+import '../screens/cart/cart_screen.dart';
+import '../screens/prescription/presciption_screen.dart';
 import 'cart.dart';
 import 'drugs.dart';
 import 'order.dart';
