@@ -1,3 +1,4 @@
+import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -21,6 +22,7 @@ class LoadMoreScreen extends StatefulWidget {
 
 class _LoadMoreScreenState extends State<LoadMoreScreen> {
   final filterController = TextEditingController();
+  var focusNode = FocusNode();
 
   List<Drug> filterlist = [];
   bool isVisible = false;
@@ -45,12 +47,13 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: AnimationLimiter(
         child: GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: count,
             mainAxisExtent: 256,
             mainAxisSpacing: 5,
-            crossAxisSpacing: 40,
+            crossAxisSpacing: 20,
           ),
           itemCount: filterlist.length,
           itemBuilder: (context, i) {
@@ -65,120 +68,6 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
               ),
             );
           },
-        ),
-      ),
-    );
-  }
-
-  SliverAppBar createSilverAppBar1() {
-    return SliverAppBar(
-      backgroundColor: Colors.green,
-      expandedHeight: 200,
-      pinned: true,
-      floating: false,
-      elevation: 0,
-      flexibleSpace: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (constraints.biggest.height <= 85) {
-              setState(() {
-                isVisible = true;
-              });
-            } else {
-              setState(() {
-                isVisible = false;
-              });
-            }
-          });
-          return FlexibleSpaceBar(
-            collapseMode: CollapseMode.parallax,
-            centerTitle: true,
-            title: AnimatedOpacity(
-              opacity: isVisible ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 200),
-              child: Text(
-                widget.title,
-              ),
-            ),
-            background: Container(
-              color: Colors.white,
-              child: Image.asset(
-                whichBanner(),
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget createSilverAppBar2(BuildContext ctx) {
-    Size size = MediaQuery.of(ctx).size;
-    return MediaQuery.removePadding(
-      context: ctx,
-      removeTop: true,
-      child: SliverAppBar(
-        automaticallyImplyLeading: false,
-        pinned: true,
-        backgroundColor: Colors.green,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: const Offset(1.1, 1.1),
-                      blurRadius: 5.0),
-                ],
-              ),
-              child: CupertinoTextField(
-                suffix: IconButton(
-                    onPressed: () {
-                      showSearchDialog(size, context);
-                    },
-                    icon: const Icon(Icons.manage_search_outlined)),
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    setState(() {
-                      filterlist = widget.list;
-                    });
-                  } else {
-                    setState(() {
-                      filterlist = widget.list
-                          .where((e) => e.fullName
-                              .toUpperCase()
-                              .contains(value.toUpperCase()))
-                          .toList();
-                    });
-                  }
-                },
-                keyboardType: TextInputType.text,
-                placeholder: 'Search',
-                placeholderStyle: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14.0,
-                  fontFamily: 'Brutal',
-                ),
-                prefix: const Padding(
-                  padding: EdgeInsets.only(left: 15, right: 10),
-                  child: Icon(
-                    Icons.search,
-                    size: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
         ),
       ),
     );
@@ -216,16 +105,76 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
-          return <Widget>[createSilverAppBar1(), createSilverAppBar2(context)];
+    return DraggableHome(
+      appBarColor: Colors.green,
+      headerWidget: Image.asset(
+        whichBanner(),
+        fit: BoxFit.cover,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          focusNode.unfocus();
+          Future.delayed(const Duration(milliseconds: 1), () {
+            focusNode.requestFocus();
+          });
         },
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          width: double.infinity,
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.search),
+      ),
+      title: Text(widget.title),
+      body: [
+        searchBarMore(),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: gridBuilder(size),
+        ),
+      ],
+    );
+  }
+
+  Widget searchBarMore() {
+    Size size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: CupertinoTextField(
+        focusNode: focusNode,
+        suffix: IconButton(
+            onPressed: () {
+              showSearchDialog(size, context);
+            },
+            icon: const Icon(Icons.manage_search_outlined)),
+        onChanged: (value) {
+          if (value.isEmpty) {
+            setState(() {
+              filterlist = widget.list;
+            });
+          } else {
+            setState(() {
+              filterlist = widget.list
+                  .where((e) =>
+                      e.fullName.toUpperCase().contains(value.toUpperCase()))
+                  .toList();
+            });
+          }
+        },
+        keyboardType: TextInputType.text,
+        placeholder: 'Search',
+        placeholderStyle: const TextStyle(
+          color: Colors.grey,
+          fontSize: 14.0,
+          fontFamily: 'Brutal',
+        ),
+        prefix: const Padding(
+          padding: EdgeInsets.only(left: 15, right: 10),
+          child: Icon(
+            Icons.search,
+            size: 18,
+            color: Colors.black,
+          ),
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white,
         ),
       ),
     );

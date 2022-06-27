@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hci_customer/screens/home/home.dart';
+import 'package:get/get.dart';
 
 import '../../constant/constant.dart';
 import '../../models/drugs.dart';
 import '../../models/global.dart';
+import '../home/home_drawer.dart';
 import 'product_tile.dart';
 import '../cart/cart_screen.dart';
 import '../misc/nearby.dart';
@@ -17,12 +18,12 @@ class InfoScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
     bool isPhone = size.shortestSide < 650 ? true : false;
-    var list = drugController.drugs;
+    var list = [...drugController.drugs];
     list.removeWhere((e) => e.id == _drug.id);
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: () {
-          Navigator.popAndPushNamed(context, HomeScreen.routeName);
+          Navigator.popAndPushNamed(context, HomeDrawer.routeName);
         }),
         title: Text(
           _drug.title,
@@ -33,9 +34,11 @@ class InfoScreen extends ConsumerWidget {
           IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CartScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartScreen(),
+                  ),
+                );
               },
               icon: const Icon(Icons.shopping_cart))
         ],
@@ -47,13 +50,11 @@ class InfoScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             height: size.height * 0.3,
             width: double.infinity,
-            child: Hero(
-                tag: _drug.id,
-                child: Image.network(
-                  _drug.imgUrl,
-                  fit: BoxFit.cover,
-                  cacheHeight: 500,
-                )),
+            child: Image.network(
+              _drug.imgUrl,
+              fit: BoxFit.fill,
+              cacheHeight: 500,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -153,8 +154,7 @@ class InfoScreen extends ConsumerWidget {
             ),
           ),
           GestureDetector(
-            onTap: () =>
-                Navigator.of(context).pushNamed(NearbyStoreScreen.routeName),
+            onTap: () => Get.toNamed(NearbyStoreScreen.routeName),
             child: const Padding(
               padding: EdgeInsets.all(15),
               child: SizedBox(
@@ -178,15 +178,19 @@ class InfoScreen extends ConsumerWidget {
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: isPhone ? 2 : (size.width / 200).ceil(),
-              mainAxisExtent: 250,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isPhone ? 2 : (size.width / 200).ceil(),
+                crossAxisSpacing: 10,
+                mainAxisExtent: 250,
+              ),
+              itemCount: list.length > 4 ? 4 : list.length,
+              itemBuilder: (context, i) => DrugTile(list[i]),
             ),
-            itemCount: list.length > 4 ? 4 : list.length,
-            itemBuilder: (context, i) => DrugTile(list[i]),
           ),
         ],
       )),

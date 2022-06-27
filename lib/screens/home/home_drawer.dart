@@ -6,9 +6,8 @@ import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hci_customer/screens/home/drawer.dart';
-import 'package:hci_customer/screens/orders/order_history.dart';
+import 'package:hci_customer/screens/orders/history/order_history.dart';
 
-import '../../provider/general_provider.dart';
 import '../../provider/general_provider.dart';
 import '../about/about.dart';
 import 'home.dart';
@@ -77,7 +76,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
     final currentScreen = ref.watch(ScreenProvider);
     switch (currentScreen) {
       case MenuItems.home:
-        return HomeScreen();
+        return const HomeScreen();
       case MenuItems.about:
         return const AboutScreen();
       case MenuItems.orders:
@@ -85,21 +84,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
       case MenuItems.prescrip:
         return const PresciptionHistoryScree();
       default:
-        return HomeScreen();
-    }
-  }
-
-  Future<bool> onWillPop() {
-    if (backPressCounter < 2) {
-      Fluttertoast.showToast(
-          msg: "Press ${backPressTotal - backPressCounter} time to exit app");
-      backPressCounter++;
-      Future.delayed(const Duration(seconds: 1, milliseconds: 500), () {
-        backPressCounter--;
-      });
-      return Future.value(false);
-    } else {
-      return Future.value(true);
+        return const HomeScreen();
     }
   }
 }

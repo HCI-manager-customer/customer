@@ -10,10 +10,9 @@ class SearchDialog extends StatelessWidget {
     return Material(
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(color: Colors.green),
           elevation: 0,
           title: const Text(
-            'Advanced Search',
+            'Search',
             style: TextStyle(color: Colors.green),
           ),
           centerTitle: true,

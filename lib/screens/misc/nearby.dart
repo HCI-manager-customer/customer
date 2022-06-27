@@ -13,7 +13,8 @@ class NearbyStoreScreen extends StatelessWidget {
           title: const Text('Nearby Store'),
         ),
         body: Center(
-          child: Image.asset('assets/imgs/nearby.PNG'),
+          child:
+              InteractiveViewer(child: Image.asset('assets/imgs/nearby.PNG')),
         ));
   }
 }

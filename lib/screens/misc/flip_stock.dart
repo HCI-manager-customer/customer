@@ -29,9 +29,11 @@ class _FlipStockState extends State<FlipStock>
 
   @override
   Widget build(BuildContext context) {
-    return RotationTransition(
-      turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
-      child: Lottie.asset('assets/json-gif/pacman-loading.json'),
+    return FittedBox(
+      child: RotationTransition(
+        turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
+        child: Lottie.asset('assets/json-gif/pacman-loading.json'),
+      ),
     );
   }
 }

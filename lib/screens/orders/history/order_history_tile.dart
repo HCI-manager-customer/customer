@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/order.dart';
+import '../../../models/order.dart';
 
 class OrderHistoryTile extends StatelessWidget {
   const OrderHistoryTile(this.order);
@@ -83,6 +83,7 @@ class OrderHistoryTile extends StatelessWidget {
               '${order.listCart.length - 2} more',
               style: const TextStyle(
                 fontSize: 15,
+                fontWeight: FontWeight.bold,
                 letterSpacing: 1,
               ),
             )

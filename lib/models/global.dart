@@ -43,7 +43,7 @@ void updateUser(PharmacyUser u) {
 
 void showAddedMsg(BuildContext context, Drug drug, WidgetRef ref) {
   addorInc(drug, ref, context);
-
+  ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       action: SnackBarAction(

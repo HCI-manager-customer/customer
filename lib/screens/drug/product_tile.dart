@@ -21,6 +21,7 @@ class DrugTile extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
+            print(_drug.id);
             Navigator.push(context,
                 MaterialPageRoute(builder: (ctx) => InfoScreen(_drug)));
           },
@@ -39,15 +40,13 @@ class DrugTile extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Hero(
-                        tag: _drug.id,
-                        child: Image.network(
-                          _drug.imgUrl,
-                          height: 100,
-                          cacheHeight: 500,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
+                      child: Image.network(
+                        _drug.imgUrl,
+                        height: 100,
+                        cacheWidth: 487,
+                        cacheHeight: 300,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
                       ),
                     ),
                     Align(

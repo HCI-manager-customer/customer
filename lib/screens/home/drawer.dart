@@ -22,7 +22,7 @@ class MenuItems {
   static const home = MenuItemDra('Home', Icons.home);
   static const orders = MenuItemDra('My Orders', Icons.shopping_bag);
   static const prescrip =
-      MenuItemDra('My Prescription', MyFlutterApp.prescription_bottle);
+      MenuItemDra('My Prescription', MyFlutterApp.prescriptionBottle);
   static const about = MenuItemDra('About Us', Icons.info_outline_rounded);
 
   static const all = <MenuItemDra>[home, orders, prescrip, about];

@@ -1,65 +1,67 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/state_manager.dart';
-import 'package:hci_customer/addons/responsive.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hci_customer/controllers/drug_controller.dart';
+import 'package:hci_customer/screens/drug/btnDrug.dart';
 import '../../models/category.dart';
 import '../../models/drugs.dart';
-import '../drug/btnDrug.dart';
-import 'home_appbar.dart';
+import '../cart/cart_screen.dart';
 import 'smallGrid.dart';
 import '../drug/load_more/load_more.dart';
 import '../misc/search_dialog.dart';
 
-class HomeScreen extends ConsumerWidget {
-  HomeScreen();
+class HomeScreen extends StatelessWidget {
+  const HomeScreen();
 
   static const routeName = 'home';
 
-  bool isTop = false;
-
-  int a = 0;
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     bool isPhone = size.shortestSide < 650 ? true : false;
-    return GetX<DrugController>(
-      init: DrugController(),
-      builder: (drugController) {
-        if (drugController.drugs.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
-          );
-        } else {
-          final drugs = drugController.drugs;
-          return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => showSearchDialog(size, context, drugs),
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.search),
+    return DraggableHome(
+        appBarColor: Colors.green,
+        headerBottomBar: const Center(
+          child: Text(
+            'Pull down to search',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(const CartScreen());
+            },
+            icon: const Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
             ),
-            appBar: const HomeAppBar(),
-            body: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _WidgetBtnGroup(isPhone, context),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: _HomeBody(context, isPhone, size, drugs),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-      },
-    );
+          ),
+        ],
+        leading: IconButton(
+          onPressed: () => ZoomDrawer.of(context)!.toggle(),
+          icon: const Icon(Icons.menu_rounded),
+        ),
+        title: const Text("Pharmacy"),
+        headerWidget: _WidgetBtnGroup(isPhone, context),
+        expandedBody: const SearchDialog(),
+        fullyStretchable: true,
+        alwaysShowLeadingAndAction: true,
+        body: [
+          GetX<DrugController>(
+              init: DrugController(),
+              builder: (drugController) {
+                final drugs = drugController.drugs;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: _HomeBody(context, isPhone, size, drugs),
+                );
+              }),
+        ]);
   }
 
   void showSearchDialog(Size size, BuildContext context, var list) {
@@ -134,21 +136,34 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _WidgetBtnGroup(bool isPhone, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: Responsive.isDesktop(context) ? 4 : 2,
-            childAspectRatio: Responsive.isDesktop(context)
-                ? 6
-                : Responsive.isMobile(context)
-                    ? 3
-                    : 5,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5),
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        children: [...iconList.map((e) => ButtonDrug(e)).toList()],
+    return Container(
+      color: Colors.green,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 60,
+          ),
+          Text(
+            "Pharmacy",
+            style: GoogleFonts.kanit(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                ButtonDrug(iconList[0]),
+                ButtonDrug(iconList[1]),
+                ButtonDrug(iconList[2]),
+                ButtonDrug(iconList[3]),
+              ],
+            ),
+          ),
+          const SizedBox(height: 80),
+        ],
       ),
     );
   }

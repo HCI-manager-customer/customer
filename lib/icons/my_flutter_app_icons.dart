@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/MyFlutterApp.ttf
 ///
-/// 
+///
 /// * Font Awesome 5, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL (https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt)
@@ -25,9 +25,14 @@ class MyFlutterApp {
   static const _kFontFam = 'MyFlutterApp';
   static const String? _kFontPkg = null;
 
-  static const IconData briefcase_medical = IconData(0xf469, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData capsules = IconData(0xf46b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData pills = IconData(0xf484, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData prescription_bottle = IconData(0xf485, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData clinic_medical = IconData(0xf7f2, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData briefcaseMedical =
+      IconData(0xf469, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData capsules =
+      IconData(0xf46b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData pills =
+      IconData(0xf484, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData prescriptionBottle =
+      IconData(0xf485, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData clinicMedical =
+      IconData(0xf7f2, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

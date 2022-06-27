@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
+import 'package:hci_customer/controllers/order_controller.dart';
 import 'package:hci_customer/models/global.dart';
 
-import '../../models/order.dart';
-import '../../models/order.dart';
+import '../../../models/order.dart';
 import 'order_history_tile.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class OrderHistoryScreen extends StatefulWidget {
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   List<Order> list = [];
-
+  final OrderController _orderController = Get.put(OrderController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,12 +32,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: FutureBuilder(
-            future: getList(),
-            builder: (context, snap) {
-              if (!snap.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (list.isEmpty) {
+          child: GetX<OrderController>(
+            init: OrderController(),
+            builder: (ordersCtl) {
+              if (ordersCtl.orders.isEmpty) {
                 return const Center(
                   child: Text(
                     'You don\'t have any order',
@@ -47,7 +46,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 return Column(
                   children: [
                     const SizedBox(height: 20),
-                    ...list.map((e) => OrderHistoryTile(e)).toList(),
+                    ...ordersCtl.orders
+                        .map((e) => OrderHistoryTile(e))
+                        .toList(),
                   ],
                 );
               }
@@ -60,14 +61,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
   Future getList() async {
     final orderDB = db.collection('orders');
-    // await orderDB.get().then((value) {
-    //   for (var e in value.docs) {
-    //     if (e.data()['user']['mail'] ==
-    //         FirebaseAuth.instance.currentUser!.email) {
-    //       list.add(Order.fromMap(e.data()));
-    //     }
-    //   }
-    // });
     await orderDB
         .where('user.mail', isEqualTo: FirebaseAuth.instance.currentUser!.email)
         .get()

@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hci_customer/models/user.dart';
+import 'package:hci_customer/screens/home/home.dart';
 import 'package:hci_customer/screens/misc/nearby.dart';
 import 'package:hci_customer/screens/payment/payment.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: navKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -47,6 +48,8 @@ class MyApp extends StatelessWidget {
         PaymentScreen.routeName: (context) => const PaymentScreen(),
         MyApp.routeName: (context) => const MyApp(),
         NearbyStoreScreen.routeName: (context) => const NearbyStoreScreen(),
+        HomeDrawer.routeName: (context) => const HomeDrawer(),
+        HomeScreen.routeName: (context) => const HomeScreen(),
       },
       home: const MainAppBuilder(),
     );
