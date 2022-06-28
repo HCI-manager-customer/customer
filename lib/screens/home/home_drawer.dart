@@ -11,7 +11,7 @@ import 'package:hci_customer/screens/orders/history/order_history.dart';
 import '../../provider/general_provider.dart';
 import '../about/about.dart';
 import 'home.dart';
-import '../prescription/prescription_histoy.dart';
+import '../prescription/history/prescription_histoy.dart';
 
 class HomeDrawer extends ConsumerStatefulWidget {
   const HomeDrawer();

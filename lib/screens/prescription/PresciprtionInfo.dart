@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:hci_customer/models/global.dart';
 import 'package:hci_customer/models/prescription.dart';
 import 'package:hci_customer/provider/general_provider.dart';
@@ -149,26 +150,10 @@ class SendPresciprClass {
   Future<void> myAsyncMethod(BuildContext context, Function onSuccess) async {
     UploadTask? uploadTask;
     try {
-      showDialog(
-        context: context,
+      Get.defaultDialog(
+        title: "Uploading",
+        content: const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
-        builder: (BuildContext context) {
-          return Dialog(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              width: MediaQuery.of(context).size.width * 0.8,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  CircularProgressIndicator(),
-                  Text("Loading"),
-                ],
-              ),
-            ),
-          );
-        },
       );
       final file = File(xfile!.path);
       final path = 'prescription/${xfile!.name}';

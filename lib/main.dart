@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hci_customer/models/user.dart';
 import 'package:hci_customer/screens/home/home.dart';
@@ -20,6 +21,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.green,
+      systemNavigationBarColor: Colors.green,
+    ),
   );
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   final DrugController drugController = Get.put(DrugController());

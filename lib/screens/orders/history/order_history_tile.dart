@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../models/order.dart';
 
@@ -61,10 +63,27 @@ class OrderHistoryTile extends StatelessWidget {
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 leading: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Image.network(
-                    order.listCart[i].drug.imgUrl,
-                    cacheHeight: 500,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  // child: Image.network(
+                  //   order.listCart[i].drug.imgUrl,
+                  //   cacheHeight: 500,
+                  // ),
+                  child: CachedNetworkImage(
+                    height: 100,
+                    memCacheHeight: 500,
+                    imageUrl: order.listCart[i].drug.imgUrl,
+                    placeholder: (_, url) => Lottie.asset(
+                      'assets/json-gif/image-loading.json',
+                      height: 100,
+                      alignment: Alignment.center,
+                      fit: BoxFit.fill,
+                    ),
+                    errorWidget: (_, url, er) => Lottie.asset(
+                      'assets/json-gif/image-loading.json',
+                      alignment: Alignment.center,
+                      height: 100,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 title: Text(

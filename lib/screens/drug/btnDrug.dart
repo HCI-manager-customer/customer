@@ -48,7 +48,7 @@ class ButtonDrug extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
-          // width: 0,
+          width: 180,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),

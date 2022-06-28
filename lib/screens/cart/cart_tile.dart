@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hci_customer/addons/responsive.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../provider/general_provider.dart';
 import '../drug/info.dart';
-import '../misc/flip_stock.dart';
 
 class CartTile extends ConsumerWidget {
   CartTile(this.index);
@@ -45,17 +46,26 @@ class CartTile extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    child: Image.network(
+                    child: CachedNetworkImage(
                       height: imgHei.toDouble(),
                       width: imgWid.toDouble(),
-                      cart.drug.imgUrl,
                       fit: BoxFit.fill,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(
-                          child: FlipStock(),
-                        );
-                      },
+                      memCacheHeight: 500,
+                      imageUrl: cart.drug.imgUrl,
+                      placeholder: (_, url) => Lottie.asset(
+                        'assets/json-gif/image-loading.json',
+                        height: imgHei.toDouble(),
+                        width: imgWid.toDouble(),
+                        alignment: Alignment.center,
+                        fit: BoxFit.fill,
+                      ),
+                      errorWidget: (_, url, er) => Lottie.asset(
+                        'assets/json-gif/image-loading.json',
+                        alignment: Alignment.center,
+                        height: imgHei.toDouble(),
+                        width: imgWid.toDouble(),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   SizedBox(

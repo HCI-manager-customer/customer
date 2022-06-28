@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hci_customer/screens/drug/info.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../models/drugs.dart';
 import '../../models/global.dart';
@@ -40,13 +42,38 @@ class DrugTile extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        _drug.imgUrl,
+                      // child: FadeInImage(
+                      //   image: Image.network(
+                      //     _drug.imgUrl,
+                      //     height: 100,
+                      //     cacheWidth: 487,
+                      //     cacheHeight: 300,
+                      //     fit: BoxFit.cover,
+                      //     width: double.infinity,
+                      //   ).image,
+                      //   placeholder: Lottie.asset(
+                      //     'assets/json-gif/image-loading.json',
+                      //     height: 100,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
+                      child: CachedNetworkImage(
                         height: 100,
-                        cacheWidth: 487,
-                        cacheHeight: 300,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
+                        memCacheWidth: 487,
+                        memCacheHeight: 300,
+                        imageUrl: _drug.imgUrl,
+                        placeholder: (_, url) => Lottie.asset(
+                          'assets/json-gif/image-loading.json',
+                          height: 100,
+                          alignment: Alignment.center,
+                          fit: BoxFit.fill,
+                        ),
+                        errorWidget: (_, url, er) => Lottie.asset(
+                          'assets/json-gif/image-loading.json',
+                          alignment: Alignment.center,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                     Align(

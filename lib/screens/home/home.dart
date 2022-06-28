@@ -46,7 +46,13 @@ class HomeScreen extends StatelessWidget {
           onPressed: () => ZoomDrawer.of(context)!.toggle(),
           icon: const Icon(Icons.menu_rounded),
         ),
-        title: const Text("Pharmacy"),
+        title: Text(
+          "Pharmacy",
+          style: GoogleFonts.kanit(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         headerWidget: _WidgetBtnGroup(isPhone, context),
         expandedBody: const SearchDialog(),
         fullyStretchable: true,

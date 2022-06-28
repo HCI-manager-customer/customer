@@ -1,12 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:hci_customer/models/global.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../icons/my_flutter_app_icons.dart';
 import '../../main.dart';
@@ -51,13 +53,24 @@ class DrawerScreen extends ConsumerWidget {
                 radius: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(80.0),
-                  child: Image.network(
-                      fit: BoxFit.fill,
-                      width: 500,
+                  child: CachedNetworkImage(
+                    height: 500,
+                    fit: BoxFit.cover,
+                    memCacheHeight: 500,
+                    imageUrl: user!.photoURL.toString(),
+                    placeholder: (_, url) => Lottie.asset(
+                      'assets/json-gif/image-loading.json',
                       height: 500,
-                      cacheHeight: 500,
-                      user!.photoURL ??
-                          'https://media.giphy.com/media/Q5Ra0QQUpPYdlFmFrj/giphy.gif'),
+                      alignment: Alignment.center,
+                      fit: BoxFit.fill,
+                    ),
+                    errorWidget: (_, url, er) => Lottie.asset(
+                      'assets/json-gif/image-loading.json',
+                      alignment: Alignment.center,
+                      height: 500,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
               ),
             ),
