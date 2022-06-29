@@ -18,7 +18,6 @@ class PresciptionHistoryScree extends StatefulWidget {
 
 class _PresciptionHistoryScreeState extends State<PresciptionHistoryScree> {
   final List<Prescription> list = [];
-  final PreScripController _preScriptController = Get.put(PreScripController());
 
   @override
   Widget build(BuildContext context) {

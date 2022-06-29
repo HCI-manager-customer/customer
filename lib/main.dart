@@ -73,7 +73,7 @@ class MainAppBuilder extends ConsumerStatefulWidget {
 class _MainAppBuilderState extends ConsumerState<MainAppBuilder> {
   final db = FirebaseFirestore.instance;
 
-  Future<void> sendUser() async {
+  Widget sendUser() {
     final u = FirebaseAuth.instance.currentUser!;
     final phone = u.phoneNumber ?? 0;
     var user = PharmacyUser(
@@ -82,6 +82,7 @@ class _MainAppBuilderState extends ConsumerState<MainAppBuilder> {
         phone: phone.toString(),
         addr: 'user home');
     checkExist(user);
+    return const HomeDrawer();
   }
 
   Future<void> checkExist(PharmacyUser u) async {
@@ -108,10 +109,11 @@ class _MainAppBuilderState extends ConsumerState<MainAppBuilder> {
         if (snap.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator.adaptive());
         } else if (snap.hasData) {
-          sendUser();
-          return const HomeDrawer();
+          return sendUser();
+          // Get.to(() => const HomeDrawer());
         } else {
           return const LoginScreen();
+          // Get.to(() => const LoginScreen());
         }
       },
     );

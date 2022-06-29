@@ -104,6 +104,7 @@ class DrawerScreen extends ConsumerWidget {
                       await FirebaseAuth.instance.signOut();
                       wipeData(ref);
                       navKey.currentState!.popUntil((route) => route.isFirst);
+                      //Get.to(() => const MainAppBuilder());
                     },
                     minLeadingWidth: 20,
                     leading: const Icon(Icons.logout),

@@ -23,7 +23,6 @@ class DrugTile extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            print(_drug.id);
             Navigator.push(context,
                 MaterialPageRoute(builder: (ctx) => InfoScreen(_drug)));
           },
@@ -42,21 +41,6 @@ class DrugTile extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      // child: FadeInImage(
-                      //   image: Image.network(
-                      //     _drug.imgUrl,
-                      //     height: 100,
-                      //     cacheWidth: 487,
-                      //     cacheHeight: 300,
-                      //     fit: BoxFit.cover,
-                      //     width: double.infinity,
-                      //   ).image,
-                      //   placeholder: Lottie.asset(
-                      //     'assets/json-gif/image-loading.json',
-                      //     height: 100,
-                      //     fit: BoxFit.cover,
-                      //   ),
-                      // ),
                       child: CachedNetworkImage(
                         height: 100,
                         memCacheWidth: 487,

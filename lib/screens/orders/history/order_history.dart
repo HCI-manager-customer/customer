@@ -17,7 +17,6 @@ class OrderHistoryScreen extends StatefulWidget {
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   List<Order> list = [];
-  final OrderController _orderController = Get.put(OrderController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

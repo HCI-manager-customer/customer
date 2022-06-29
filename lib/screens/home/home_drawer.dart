@@ -5,9 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:hci_customer/screens/home/drawer.dart';
 import 'package:hci_customer/screens/orders/history/order_history.dart';
 
+import '../../controllers/order_controller.dart';
+import '../../controllers/prescript_controller.dart';
 import '../../provider/general_provider.dart';
 import '../about/about.dart';
 import 'home.dart';
@@ -24,13 +27,20 @@ class HomeDrawer extends ConsumerStatefulWidget {
 
 class _HomeDrawerState extends ConsumerState<HomeDrawer> {
   final _drawerController = ZoomDrawerController();
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(UserProvider.state).state = FirebaseAuth.instance;
     });
+    OrderController orderController = Get.put(OrderController());
+    PreScripController preScriptController = Get.put(PreScripController());
+
+    Get.delete<OrderController>();
+    Get.delete<PreScripController>();
+
+    orderController = Get.put(OrderController());
+    preScriptController = Get.put(PreScripController());
   }
 
   int backPressCounter = 0;
