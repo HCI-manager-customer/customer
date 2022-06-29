@@ -16,8 +16,6 @@ class PrescriptionScreen extends ConsumerStatefulWidget {
 }
 
 class _PrescriptionScreenState extends ConsumerState<PrescriptionScreen> {
-  String a = 'f';
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,8 +27,10 @@ class _PrescriptionScreenState extends ConsumerState<PrescriptionScreen> {
           backgroundColor: Colors.green,
         ),
         body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: const [
                 CameraDrug(),
                 PrescriptionInfo(),

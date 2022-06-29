@@ -6,13 +6,13 @@ import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:hci_customer/screens/heart_rate/hear_screen.dart';
 import 'package:hci_customer/screens/home/drawer.dart';
 import 'package:hci_customer/screens/orders/history/order_history.dart';
 
 import '../../controllers/order_controller.dart';
 import '../../controllers/prescript_controller.dart';
 import '../../provider/general_provider.dart';
-import '../about/about.dart';
 import 'home.dart';
 import '../prescription/history/prescription_histoy.dart';
 
@@ -73,7 +73,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
           showShadow: true,
           mainScreenTapClose: true,
           androidCloseOnBackTap: true,
-          drawerShadowsBackgroundColor: Colors.green,
+          drawerShadowsBackgroundColor: Colors.teal,
           openCurve: Curves.fastOutSlowIn,
           mainScreen: getScreen(),
           menuScreen: DrawerScreen(_drawerController),
@@ -88,11 +88,11 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
       case MenuItems.home:
         return const HomeScreen();
       case MenuItems.about:
-        return const AboutScreen();
+        return const HeartRateScreen();
       case MenuItems.orders:
         return const OrderHistoryScreen();
       case MenuItems.prescrip:
-        return const PresciptionHistoryScree();
+        return PresciptionHistoryScree();
       default:
         return const HomeScreen();
     }

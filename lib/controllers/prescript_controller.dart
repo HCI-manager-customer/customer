@@ -21,7 +21,6 @@ class PrescriptionSerivce {
       FirebaseFirestore.instance.collection('prescription');
 
   Stream<List<Prescription>> preScriptStream() {
-    print('stream mail: ${FirebaseAuth.instance.currentUser!.email}');
     return _prescription
         .where('mail', isEqualTo: FirebaseAuth.instance.currentUser!.email)
         .snapshots()

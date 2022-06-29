@@ -2,6 +2,7 @@ import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
 import 'package:hci_customer/settings.dart';
 
 import '../../../models/drugs.dart';
@@ -111,6 +112,13 @@ class _LoadMoreScreenState extends State<LoadMoreScreen> {
         whichBanner(),
         fit: BoxFit.cover,
       ),
+      leading: IconButton(
+        onPressed: () {
+          Get.back();
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
+      alwaysShowLeadingAndAction: true,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           focusNode.unfocus();

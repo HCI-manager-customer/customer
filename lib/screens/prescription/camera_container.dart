@@ -19,7 +19,8 @@ class _CameraDrugState extends ConsumerState<CameraDrug> {
 
   Future pickImage() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final image = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 85);
       if (image == null) return;
       final imageTemp = File(image.path);
       ref.read(ImgPath.notifier).state = image;
@@ -31,7 +32,8 @@ class _CameraDrugState extends ConsumerState<CameraDrug> {
 
   Future takePicture() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      final image = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 85);
       final imageTemp = File(image!.path);
       ref.read(ImgPath.notifier).state = image;
       setState(() {
@@ -43,7 +45,7 @@ class _CameraDrugState extends ConsumerState<CameraDrug> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double height = size.height * 0.45;
+    double height = size.height * 0.35;
     double width = size.width * 0.7;
     return SingleChildScrollView(
       child: Column(

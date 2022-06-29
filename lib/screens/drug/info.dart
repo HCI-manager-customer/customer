@@ -83,7 +83,7 @@ class InfoScreen extends ConsumerWidget {
             height: size.height * 0.06,
             child: ElevatedButton(
               onPressed: () {
-                addorInc(_drug, ref, context);
+                addorInc(_drug, ref);
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 Navigator.push(
                     context,

@@ -25,7 +25,8 @@ class MenuItems {
   static const orders = MenuItemDra('My Orders', Icons.shopping_bag);
   static const prescrip =
       MenuItemDra('My Prescription', MyFlutterApp.prescriptionBottle);
-  static const about = MenuItemDra('About Us', Icons.info_outline_rounded);
+  static const about =
+      MenuItemDra('Heart Rate Monitor', Icons.monitor_heart_sharp);
 
   static const all = <MenuItemDra>[home, orders, prescrip, about];
 }
@@ -34,7 +35,6 @@ class DrawerScreen extends ConsumerWidget {
   const DrawerScreen(this._drawerController);
 
   final ZoomDrawerController _drawerController;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(UserProvider).currentUser;
@@ -104,7 +104,6 @@ class DrawerScreen extends ConsumerWidget {
                       await FirebaseAuth.instance.signOut();
                       wipeData(ref);
                       navKey.currentState!.popUntil((route) => route.isFirst);
-                      //Get.to(() => const MainAppBuilder());
                     },
                     minLeadingWidth: 20,
                     leading: const Icon(Icons.logout),

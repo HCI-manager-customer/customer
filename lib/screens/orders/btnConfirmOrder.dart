@@ -41,7 +41,8 @@ class BtnConfirmOrder extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PaymentCompleteScreen(),
+                      builder: (context) =>
+                          const PaymentCompleteScreen('payment'),
                     ),
                   );
                 }

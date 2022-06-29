@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:hci_customer/models/global.dart';
+import 'package:hci_customer/models/note.dart';
 import 'package:hci_customer/models/prescription.dart';
 import 'package:hci_customer/provider/general_provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +25,7 @@ class PrescriptionInfo extends ConsumerStatefulWidget {
 class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
   final nameCtl = TextEditingController();
   final addrCtl = TextEditingController();
+  final noteCtl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String mail = '';
 
@@ -43,21 +45,14 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
         key: _formKey,
         child: Column(
           children: [
-            const SizedBox(height: 10),
             Consumer(
               builder: (context, ref, child) {
-                return Column(
-                  children: [
-                    Text(
-                      ref.watch(UserProvider).currentUser!.displayName ?? '',
-                      style: const TextStyle(fontSize: 20, letterSpacing: 1),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      mail = ref.watch(UserProvider).currentUser!.email ?? '',
-                      style: const TextStyle(fontSize: 20, letterSpacing: 1),
-                    )
-                  ],
+                return Text(
+                  'Sender: ${ref.watch(UserProvider).currentUser!.displayName ?? ''}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(fontSize: 20, letterSpacing: 1),
                 );
               },
             ),
@@ -72,7 +67,7 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
               },
               decoration: const InputDecoration(hintText: 'Patient Name'),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             TextFormField(
               controller: addrCtl,
               validator: (value) {
@@ -82,6 +77,12 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
                 return null;
               },
               decoration: const InputDecoration(hintText: 'Address'),
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
+              controller: noteCtl,
+              decoration: const InputDecoration(
+                  hintText: 'Any note for us? (optional)'),
             ),
             const SizedBox(height: 20),
             SizedBox(
@@ -116,29 +117,38 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
 
   Future uploadImg() async {
     SendPresciprClass(ref.watch(ImgPath)).myAsyncMethod(context, (value) {
+      Note note =
+          Note(msg: '>Posted a Drug Prescription', time: DateTime.now());
+      if (noteCtl.text.isNotEmpty) {
+        note.msg = '>${noteCtl.text}';
+      }
       final prescrip = Prescription(
+        idChat: '1',
         name: nameCtl.text,
         addr: addrCtl.text,
         mail: FirebaseAuth.instance.currentUser!.email.toString(),
         Imgurl: value,
+        medicines: [],
+        status: 'pending',
+        note: [note],
       );
       if (!mounted) return;
       if (value.length > 10) {
         uploadPrescipInfo(prescrip);
-        Navigator.of(context).pop();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const PaymentCompleteScreen(),
-          ),
-        );
+        Get.back();
+        Get.to(() => const PaymentCompleteScreen('pre'));
         ref.invalidate(ImgPath);
       }
     });
   }
 
   Future<void> uploadPrescipInfo(Prescription prescrip) async {
-    await db.collection('prescription').add(prescrip.toMap());
+    await db.collection('prescription').add(prescrip.toMap()).then((value) {
+      prescrip.idChat = value.id;
+      db.collection('prescription').doc(value.id).update(
+            prescrip.toMap(),
+          );
+    });
   }
 }
 
@@ -151,7 +161,7 @@ class SendPresciprClass {
     UploadTask? uploadTask;
     try {
       Get.defaultDialog(
-        title: "Uploading",
+        title: "Uploading, Please wait...",
         content: const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );

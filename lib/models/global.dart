@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+import 'package:hci_customer/models/note.dart';
 import 'package:hci_customer/models/user.dart';
 import 'package:intl/intl.dart';
 
@@ -14,9 +17,9 @@ import 'order.dart';
 var formatter = NumberFormat('###,###');
 final db = FirebaseFirestore.instance;
 
-void addorInc(Drug drug, WidgetRef ref, BuildContext ctx) {
+void addorInc(Drug drug, WidgetRef ref) {
   final list = ref.watch(cartLProvider);
-  ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
+  Get.closeAllSnackbars();
   if (list.isEmpty) {
     list.add(Cart(drug: drug, quantity: 1, price: drug.price));
   } else if (list.isNotEmpty) {
@@ -42,7 +45,7 @@ void updateUser(PharmacyUser u) {
 }
 
 void showAddedMsg(BuildContext context, Drug drug, WidgetRef ref) {
-  addorInc(drug, ref, context);
+  addorInc(drug, ref);
   ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -50,8 +53,7 @@ void showAddedMsg(BuildContext context, Drug drug, WidgetRef ref) {
         label: 'To my Cart',
         onPressed: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const CartScreen()));
+          Get.to(() => const CartScreen());
         },
         textColor: Colors.cyanAccent,
       ),
@@ -70,6 +72,30 @@ void showAddedMsg(BuildContext context, Drug drug, WidgetRef ref) {
       backgroundColor: Colors.green,
     ),
   );
+}
+
+void sendMsgChat(String idChat, String msg) {
+  try {
+    FirebaseFirestore.instance.collection('prescription').doc(idChat).update({
+      "note":
+          FieldValue.arrayUnion([Note(msg: msg, time: DateTime.now()).toMap()])
+    });
+  } on Exception catch (e) {
+    print(e);
+  }
+}
+
+void endChat(String idChat) {
+  try {
+    sendMsgChat(idChat,
+        "*/*Ended by ${FirebaseAuth.instance.currentUser!.displayName} at ${DateTime.now()}");
+    FirebaseFirestore.instance.collection('prescription').doc(idChat).update({
+      "status":
+          "Ended by ${FirebaseAuth.instance.currentUser!.displayName} at ${DateTime.now()}",
+    });
+  } on Exception catch (e) {
+    print(e);
+  }
 }
 
 void wipeData(WidgetRef ref) {

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hci_customer/screens/payment/payment.dart';
 import 'package:intl/intl.dart';
 
 import '../../provider/general_provider.dart';
-import 'cart_tile.dart';
+import 'cart_panel.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen();
@@ -49,42 +47,7 @@ class CartScreen extends StatelessWidget {
     var formatter = NumberFormat('#,###');
     return Column(
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.75,
-          child: AnimationLimiter(
-            child: ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (_, i) {
-                return AnimationConfiguration.staggeredGrid(
-                  position: i,
-                  columnCount: list.length,
-                  duration: const Duration(milliseconds: 1000),
-                  child: ScaleAnimation(
-                    child: Slidable(
-                      endActionPane: ActionPane(
-                        motion: const DrawerMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              ref
-                                  .read(cartLProvider.notifier)
-                                  .removeCartAt(list[i]);
-                            },
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Remove',
-                          )
-                        ],
-                      ),
-                      child: CartTile(i),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+        CartPanel(list, true),
         list.isEmpty
             ? Container()
             : Expanded(
