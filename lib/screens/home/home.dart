@@ -154,6 +154,7 @@ class HomeScreen extends StatelessWidget {
             "Pharmacy",
             style: GoogleFonts.kanit(
               fontSize: 30,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),

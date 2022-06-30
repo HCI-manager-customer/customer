@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:heart_bpm/chart.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:heart_bpm/heart_bpm.dart';
 
 class HeartRateScreen extends StatefulWidget {
@@ -45,26 +45,26 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
                   child: FittedBox(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(25),
-                      child: HeartBPMDialog(
-                        context: context,
-                        onRawData: (v) {},
-                        onBPM: (value) => setState(() {
-                          setState(() {
-                            if (bpmValues.length >= 50) bpmValues.removeAt(0);
-                            bpm = value;
-                            if (bpm > 150) {
-                              bpm = 150;
-                            } else if (bpm < 50) {
-                              bpm = 50;
-                            }
-                            bpmValues.add(
-                              SensorValue(
-                                value: bpm,
-                                time: DateTime.now(),
-                              ),
-                            );
-                          });
-                        }),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 1000),
+                        child: HeartBPMDialog(
+                          context: context,
+                          onRawData: (v) {},
+                          onBPM: (value) => setState(() {
+                            setState(() {
+                              if (bpmValues.length >= 50) bpmValues.removeAt(0);
+                              bpm = value;
+                              if (bpm > 150) {
+                                bpm = 150;
+                              } else if (bpm < 50) {
+                                bpm = 50;
+                              }
+                              bpmValues.add(
+                                SensorValue(value: bpm, time: DateTime.now()),
+                              );
+                            });
+                          }),
+                        ),
                       ),
                     ),
                   ),
@@ -79,26 +79,33 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
                     ),
                   ),
                 ),
-          isBPMEnabled && bpmValues.isNotEmpty
-              ? Container(
-                  decoration: BoxDecoration(border: Border.all()),
-                  height: 120,
-                  child: BPMChart(bpmValues),
-                )
-              : const SizedBox(),
+          // isBPMEnabled && bpmValues.isNotEmpty
+          //     ? Container(
+          //         decoration: BoxDecoration(border: Border.all()),
+          //         height: 120,
+          //         width: Get.width * 0.9,
+          //         child: Expanded(child: BPMChart(bpmValues)),
+          //       )
+          //     : const SizedBox(),
           !isBPMEnabled
               ? const Text(
                   'This will may at least 10 seconds for a solid result')
               : const SizedBox(),
           isBPMEnabled && bpmValues.isNotEmpty
-              ? Text(bpm.toString())
+              ? Text(
+                  bpm.toString(),
+                  style: GoogleFonts.kanit(fontSize: 40),
+                )
               : const SizedBox(),
           isBPMEnabled && bpmValues.isNotEmpty
-              ? Text(bpm > 100
-                  ? 'Your Heart Rate too high'
-                  : bpm < 65
-                      ? 'Your Heart Rate too low'
-                      : 'Your Heart rate is normal')
+              ? Text(
+                  bpm > 100
+                      ? 'Your Heart Rate too high'
+                      : bpm < 65
+                          ? 'Your Heart Rate too low'
+                          : 'Your Heart rate is normal',
+                  style: GoogleFonts.kanit(fontSize: 20),
+                )
               : const SizedBox(),
           Center(
             child: ElevatedButton.icon(

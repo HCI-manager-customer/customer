@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hci_customer/models/order.dart';
 import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -23,6 +25,47 @@ class OrderHistoryDetail extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Your Order'),
+        actions: [
+          PopupMenuButton(
+              icon: const Icon(Icons.sort),
+              itemBuilder: (_) {
+                return [
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Date (ASC)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Date (DESC)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Name (ASC)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Name (DESC)'),
+                  ),
+                ];
+              }),
+          PopupMenuButton(onSelected: (value) {
+            if (value == 'cancel') {
+              Get.snackbar(
+                  'You can not cancel this Order', 'Order has been delivered',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  icon: const Icon(Icons.error),
+                  snackPosition: SnackPosition.BOTTOM);
+            }
+          }, itemBuilder: (_) {
+            return [
+              const PopupMenuItem(
+                value: 'cancel',
+                child: Text('Cancel Order'),
+              ),
+            ];
+          }),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -30,19 +73,42 @@ class OrderHistoryDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                'Order Date: ${DateFormat('dd MMMM, yyyy').format(order.date)}'),
-            const SizedBox(height: 15),
-            Text('Price: ${formatter.format(order.price)},000 VND'),
-            const SizedBox(height: 15),
-            Text('Items: ${order.listCart.length}'),
-            const SizedBox(height: 15),
-            const Text('Your Order Status:'),
-            const SizedBox(height: 15),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.2,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Center(child: timelineOrder(order.status)),
+              'Order Date: ${DateFormat('dd MMMM, yyyy').format(order.date)}',
+              style: GoogleFonts.kanit(fontSize: 20),
             ),
+            const SizedBox(height: 15),
+            Text(
+              'Price: ${formatter.format(order.price)},000 VND',
+              style: GoogleFonts.kanit(fontSize: 20),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              'Items: ${order.listCart.length}',
+              style: GoogleFonts.kanit(fontSize: 20),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              'Your Order Status:',
+              style: GoogleFonts.kanit(fontSize: 20),
+            ),
+            const SizedBox(height: 15),
+            StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                builder: (_, snap) {
+                  if (snap.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    final data = snap.data!.data()!;
+                    print(data['status']);
+                    return Container(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Center(child: timelineOrder(data['status'])),
+                    );
+                  }
+                },
+                stream: stream),
             Flexible(
               child: ListView(
                 children:
@@ -99,22 +165,33 @@ class timelineOrder extends StatelessWidget {
     );
   }
 
+  LineStyle linePass() {
+    return const LineStyle(color: Colors.green);
+  }
+
+  LineStyle lineNot() {
+    return const LineStyle(color: Colors.grey);
+  }
+
   List<Widget> timeLine() {
     List<IndicatorStyle> list;
-    print(status);
-    Widget indi;
+    List<LineStyle> listLine;
     if (status == 'NewOrder') {
       list = [current(), notHere(), notHere()];
+      listLine = [lineNot(), lineNot(), lineNot(), lineNot()];
     } else if (status == 'Shipping') {
       list = [passHere(), current(), notHere()];
+      listLine = [linePass(), linePass(), lineNot(), lineNot()];
     } else {
       list = [passHere(), passHere(), passHere()];
+      listLine = [linePass(), linePass(), linePass(), linePass()];
     }
     return [
       TimelineTile(
         isFirst: true,
         isLast: false,
         indicatorStyle: list[0],
+        afterLineStyle: listLine[0],
         axis: TimelineAxis.horizontal,
         alignment: TimelineAlign.center,
         startChild: const Icon(
@@ -137,11 +214,14 @@ class timelineOrder extends StatelessWidget {
       TimelineTile(
         isFirst: false,
         isLast: false,
+        beforeLineStyle: listLine[1],
+        afterLineStyle: listLine[2],
         indicatorStyle: list[1],
         axis: TimelineAxis.horizontal,
         alignment: TimelineAlign.center,
         startChild: const Icon(
           Icons.delivery_dining,
+          size: 35,
           color: Colors.green,
         ),
         endChild: Container(
@@ -159,12 +239,14 @@ class timelineOrder extends StatelessWidget {
       ),
       TimelineTile(
         isFirst: false,
+        beforeLineStyle: listLine[3],
         isLast: true,
         indicatorStyle: list[2],
         axis: TimelineAxis.horizontal,
         alignment: TimelineAlign.center,
         startChild: const Icon(
           Icons.home,
+          size: 35,
           color: Colors.green,
         ),
         endChild: Container(

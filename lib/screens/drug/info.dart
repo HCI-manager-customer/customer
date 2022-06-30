@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../constant/constant.dart';
 import '../../models/drugs.dart';
@@ -13,6 +16,11 @@ import '../misc/nearby.dart';
 class InfoScreen extends ConsumerWidget {
   const InfoScreen(this._drug);
   final Drug _drug;
+
+  //random Color
+  Color _randomColor() {
+    return Color(0xFF000000 + (Random().nextInt(0xFFFFFF) + 1));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,15 +40,16 @@ class InfoScreen extends ConsumerWidget {
         backgroundColor: Colors.green,
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CartScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.shopping_cart))
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.shopping_cart),
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -118,6 +127,80 @@ class InfoScreen extends ConsumerWidget {
             ),
           ),
           Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              width: Get.width * 0.85,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue, width: 4),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Shipping Method: Pickup, Delivery \nFree Shipping for Order above 300,000 VND',
+                style: GoogleFonts.kanit(fontSize: 18),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              width: Get.width * 0.85,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue, width: 4),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Delivery Service Provider:',
+                    style: GoogleFonts.kanit(fontSize: 18),
+                  ),
+                  Wrap(
+                    spacing: 15,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFFE66020),
+                            shape: const StadiumBorder()),
+                        child: const Text("Giao Hang Nhanh"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFFE2492B),
+                            shape: const StadiumBorder()),
+                        child: const Text("Shoppe"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFF152348),
+                            shape: const StadiumBorder()),
+                        child: const Text("Ahamove"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFF03AA4D),
+                            shape: const StadiumBorder()),
+                        child: const Text("Grab"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFFEFAE11),
+                            shape: const StadiumBorder()),
+                        child: const Text("Be"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: RichText(
               text: TextSpan(
@@ -136,7 +219,7 @@ class InfoScreen extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: RichText(
               text: TextSpan(
                 style: const TextStyle(color: Colors.black, letterSpacing: 1.0),
@@ -149,6 +232,34 @@ class InfoScreen extends ConsumerWidget {
                     text: _drug.uses,
                     style: const TextStyle(fontSize: 17),
                   )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: RichText(
+              text: const TextSpan(
+                style: TextStyle(color: Colors.black, letterSpacing: 1.0),
+                children: [
+                  TextSpan(
+                    text: "Contraindications: ",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text:
+                        '\n- Hypersensitivity to aspirin or other salicylates.',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  TextSpan(
+                    text:
+                        '\n- Hypersensitivity to any of the ingredients of the drug.',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  TextSpan(
+                    text: '\n- Children under 16 years old.',
+                    style: TextStyle(fontSize: 17),
+                  ),
                 ],
               ),
             ),
@@ -171,6 +282,13 @@ class InfoScreen extends ConsumerWidget {
               ),
             ),
           ),
+          InkWell(
+              onTap: () {
+                final d = drugController.drugs.firstWhere((element) =>
+                    element.fullName == 'Peptide Collagen Essence Mask (23g)');
+                Get.to(() => InfoScreen(d));
+              },
+              child: Image.asset('assets/imgs/imaBanner.webp')),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Text(
