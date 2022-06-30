@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hci_customer/screens/orders/remove_all_dialog.dart';
 import 'package:string_validator/string_validator.dart';
 
@@ -25,6 +26,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   var addressCtl = TextEditingController();
   var nameCtl = TextEditingController();
   var phoneCtl = TextEditingController();
+
+  String dropValue = 'Cash on Delivery';
 
   final u = FirebaseAuth.instance.currentUser!;
 
@@ -217,7 +220,52 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                                 )),
                           ],
                         ),
-                        const ETAtime('1 week')
+                        const ETAtime('1 week'),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Icon(
+                              Icons.payment,
+                              size: 25,
+                              color: Colors.green,
+                            ),
+                            const Spacer(),
+                            SizedBox(
+                              width: size.width * 0.7,
+                              child: DropdownButton(
+                                isExpanded: true,
+                                iconEnabledColor: Colors.green,
+                                value: dropValue,
+                                onChanged: (s) {
+                                  print(s);
+                                  setState(() {
+                                    dropValue = s.toString();
+                                  });
+                                },
+                                style: GoogleFonts.kanit(),
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: 'Momo',
+                                    child: Text('Momo'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'Cash on Delivery',
+                                    child: Text('Cash on Delivery'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'Zalo Pay',
+                                    child: Text('Zalo Pay'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'Bank',
+                                    child: Text('Bank'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
