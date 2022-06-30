@@ -8,13 +8,14 @@ import 'package:hci_customer/models/user.dart';
 import 'cart.dart';
 
 class Order {
+  String id;
   PharmacyUser user;
   List<Cart> listCart;
   double price;
   String status;
   DateTime date;
-
   Order({
+    required this.id,
     required this.user,
     required this.listCart,
     required this.price,
@@ -23,6 +24,7 @@ class Order {
   });
 
   Order copyWith({
+    String? id,
     PharmacyUser? user,
     List<Cart>? listCart,
     double? price,
@@ -30,6 +32,7 @@ class Order {
     DateTime? date,
   }) {
     return Order(
+      id: id ?? this.id,
       user: user ?? this.user,
       listCart: listCart ?? this.listCart,
       price: price ?? this.price,
@@ -40,6 +43,7 @@ class Order {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'user': user.toMap(),
       'listCart': listCart.map((x) => x.toMap()).toList(),
       'price': price,
@@ -50,6 +54,7 @@ class Order {
 
   factory Order.fromMap(Map<String, dynamic> map) {
     return Order(
+      id: map['id'] as String,
       user: PharmacyUser.fromMap(map['user'] as Map<String, dynamic>),
       listCart: List<Cart>.from(
         (map['listCart'] as List<dynamic>).map<Cart>(
@@ -69,7 +74,7 @@ class Order {
 
   @override
   String toString() {
-    return 'Order(user: $user, listCart: $listCart, price: $price, status: $status, date: $date)';
+    return 'Order(id: $id, user: $user, listCart: $listCart, price: $price, status: $status, date: $date)';
   }
 
   @override
@@ -77,6 +82,7 @@ class Order {
     if (identical(this, other)) return true;
 
     return other is Order &&
+        other.id == id &&
         other.user == user &&
         listEquals(other.listCart, listCart) &&
         other.price == price &&
@@ -86,7 +92,8 @@ class Order {
 
   @override
   int get hashCode {
-    return user.hashCode ^
+    return id.hashCode ^
+        user.hashCode ^
         listCart.hashCode ^
         price.hashCode ^
         status.hashCode ^

@@ -29,6 +29,7 @@ class BtnConfirmOrder extends ConsumerWidget {
                   final user = ref.watch(pharmacyUserProvider);
 
                   Order order = Order(
+                    id: '',
                     user: user,
                     listCart: list,
                     price: price,

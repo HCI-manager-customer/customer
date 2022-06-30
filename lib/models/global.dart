@@ -36,12 +36,18 @@ void addorInc(Drug drug, WidgetRef ref) {
   }
 }
 
-void sendOrder(Order order) {
-  db.collection('orders').add(order.toMap());
+void sendOrder(Order order) async {
+  await db.collection('orders').add(order.toMap()).then((value) {
+    order.id = value.id;
+    db.collection('orders').doc(value.id).update(order.toMap());
+  });
 }
 
-void updateUser(PharmacyUser u) {
-  db.collection('users').doc(u.mail).update({'addr': u.addr, 'phone': u.phone});
+void updateUser(PharmacyUser u) async {
+  await db
+      .collection('users')
+      .doc(u.mail)
+      .update({'addr': u.addr, 'phone': u.phone});
 }
 
 void showAddedMsg(BuildContext context, Drug drug, WidgetRef ref) {
