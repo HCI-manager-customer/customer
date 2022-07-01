@@ -48,7 +48,6 @@ class PresciptionHistoryTile extends StatelessWidget {
 
     if (preS.note.last.msg.startsWith('*/*')) {
       isEnded = true;
-      print(isEnded);
     }
 
     return Padding(

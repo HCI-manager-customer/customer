@@ -37,15 +37,6 @@ class RecDrugTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: Text('${drug.price.toStringAsFixed(3)} VND x $vol items'),
-      // trailing: Row(
-      //   children: [
-      //     Text(drug.rating.toStringAsFixed(1)),
-      //     const Icon(
-      //       Icons.star,
-      //       color: Colors.yellow,
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

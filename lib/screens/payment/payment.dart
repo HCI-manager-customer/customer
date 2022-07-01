@@ -238,7 +238,6 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                                 iconEnabledColor: Colors.green,
                                 value: dropValue,
                                 onChanged: (s) {
-                                  print(s);
                                   setState(() {
                                     dropValue = s.toString();
                                   });
