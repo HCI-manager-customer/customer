@@ -22,6 +22,22 @@ class PresciptionHistoryScree extends StatelessWidget {
           onPressed: () => ZoomDrawer.of(context)!.toggle(),
           icon: const Icon(Icons.menu_rounded),
         ),
+        actions: [
+          PopupMenuButton(
+              icon: const Icon(Icons.sort),
+              itemBuilder: (_) {
+                return [
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Date (ASC)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Date (DESC)'),
+                  ),
+                ];
+              }),
+        ],
       ),
       body: SingleChildScrollView(
           child: GetX<PreScripController>(
