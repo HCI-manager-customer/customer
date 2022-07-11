@@ -4,7 +4,6 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:hci_customer/controllers/order_controller.dart';
 import 'package:hci_customer/models/global.dart';
-import 'package:hci_customer/screens/misc/sort.dart';
 
 import '../../../models/order.dart';
 import 'order_history_tile.dart';
@@ -45,8 +44,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               } else {
                 return Column(
                   children: [
-                    const SizedBox(height: 10),
-                    const SortDateBox(),
+                    const SizedBox(height: 20),
                     ...ordersCtl.orders
                         .map((e) => OrderHistoryTile(e))
                         .toList(),

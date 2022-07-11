@@ -24,6 +24,7 @@ class PresciptionHistoryTile extends StatelessWidget {
     List<String> noList = [];
     String haveMed = '';
     bool isMed = false;
+    bool isEnded = false;
     if (preS.medicines.isEmpty) {
       isMed = false;
       haveMed = 'No Drug';
@@ -45,11 +46,15 @@ class PresciptionHistoryTile extends StatelessWidget {
       msg.add(Note(msg: 'No Note', time: DateTime.now()));
     }
 
+    if (preS.note.last.msg.startsWith('*/*')) {
+      isEnded = true;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: InkWell(
         onTap: () {
-          Get.to(() => const ChatScreen());
+          Get.to(() => ChatScreen(preS.idChat, isEnded));
         },
         child: Container(
           decoration: BoxDecoration(

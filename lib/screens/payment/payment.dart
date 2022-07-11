@@ -242,39 +242,23 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                                     dropValue = s.toString();
                                   });
                                 },
-                                style: GoogleFonts.kanit(color: Colors.pink),
-                                items: [
+                                style: GoogleFonts.kanit(),
+                                items: const [
                                   DropdownMenuItem(
                                     value: 'Momo',
-                                    child: Text(
-                                      'Momo',
-                                      style:
-                                          GoogleFonts.kanit(color: Colors.pink),
-                                    ),
+                                    child: Text('Momo'),
                                   ),
                                   DropdownMenuItem(
                                     value: 'Cash on Delivery',
-                                    child: Text(
-                                      'Cash on Delivery',
-                                      style: GoogleFonts.kanit(
-                                          color: Colors.green),
-                                    ),
+                                    child: Text('Cash on Delivery'),
                                   ),
                                   DropdownMenuItem(
                                     value: 'Zalo Pay',
-                                    child: Text(
-                                      'Zalo Pay',
-                                      style:
-                                          GoogleFonts.kanit(color: Colors.blue),
-                                    ),
+                                    child: Text('Zalo Pay'),
                                   ),
                                   DropdownMenuItem(
                                     value: 'Bank',
-                                    child: Text(
-                                      'Bank',
-                                      style: GoogleFonts.kanit(
-                                          color: Colors.black),
-                                    ),
+                                    child: Text('Bank'),
                                   ),
                                 ],
                               ),
