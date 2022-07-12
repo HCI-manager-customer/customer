@@ -7,9 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:get/get.dart';
+import 'package:hci_customer/controllers/user_action_controller.dart';
 import 'package:hci_customer/models/global.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../controllers/order_controller.dart';
+import '../../controllers/prescript_controller.dart';
 import '../../icons/my_flutter_app_icons.dart';
 import '../../main.dart';
 import '../../provider/general_provider.dart';
@@ -101,6 +105,9 @@ class DrawerScreen extends ConsumerWidget {
                       if (!kIsWeb) {
                         ref.watch(googleSignInProvider).signOut();
                       }
+                      await Get.delete<UserActionoController>();
+                      await Get.delete<OrderController>();
+                      await Get.delete<PreScripController>();
                       await FirebaseAuth.instance.signOut();
                       wipeData(ref);
                       navKey.currentState!.popUntil((route) => route.isFirst);

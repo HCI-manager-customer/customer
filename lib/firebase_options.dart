@@ -70,8 +70,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '649279040490',
     projectId: 'pharmacy-app-fae11',
     storageBucket: 'pharmacy-app-fae11.appspot.com',
-    androidClientId: '649279040490-of2jtcugogdutahqb0f2viuo01bt1ued.apps.googleusercontent.com',
-    iosClientId: '649279040490-9cle6ht0j905gohmgji5f7s4grktmv47.apps.googleusercontent.com',
+    androidClientId:
+        '649279040490-of2jtcugogdutahqb0f2viuo01bt1ued.apps.googleusercontent.com',
+    iosClientId:
+        '649279040490-9cle6ht0j905gohmgji5f7s4grktmv47.apps.googleusercontent.com',
     iosBundleId: 'com.example.hciCustomer',
   );
 }

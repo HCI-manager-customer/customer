@@ -3,79 +3,73 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:hci_customer/models/note.dart';
-
 class Prescription {
-  String idChat;
+  String id;
   String mail;
   String name;
   String addr;
-  String Imgurl;
+  String imgurl;
   String status;
   List<String> medicines;
-  List<Note> note;
+  DateTime createAt;
   Prescription({
-    required this.idChat,
+    required this.id,
     required this.mail,
     required this.name,
     required this.addr,
-    required this.Imgurl,
+    required this.imgurl,
     required this.status,
     required this.medicines,
-    required this.note,
+    required this.createAt,
   });
 
   Prescription copyWith({
-    String? idChat,
+    String? id,
     String? mail,
     String? name,
     String? addr,
-    String? Imgurl,
+    String? imgurl,
     String? status,
     List<String>? medicines,
-    List<Note>? note,
+    DateTime? createAt,
   }) {
     return Prescription(
-      idChat: idChat ?? this.idChat,
+      id: id ?? this.id,
       mail: mail ?? this.mail,
       name: name ?? this.name,
       addr: addr ?? this.addr,
-      Imgurl: Imgurl ?? this.Imgurl,
+      imgurl: imgurl ?? this.imgurl,
       status: status ?? this.status,
       medicines: medicines ?? this.medicines,
-      note: note ?? this.note,
+      createAt: createAt ?? this.createAt,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'idChat': idChat,
+      'id': id,
       'mail': mail,
       'name': name,
       'addr': addr,
-      'Imgurl': Imgurl,
+      'imgurl': imgurl,
       'status': status,
       'medicines': medicines,
-      'note': note.map((x) => x.toMap()).toList(),
+      'createAt': createAt.millisecondsSinceEpoch,
     };
   }
 
   factory Prescription.fromMap(Map<String, dynamic> map) {
     return Prescription(
-      idChat: map['idChat'] as String,
+      id: map['id'] as String,
       mail: map['mail'] as String,
       name: map['name'] as String,
       addr: map['addr'] as String,
-      Imgurl: map['Imgurl'] as String,
+      imgurl: map['imgurl'] as String,
       status: map['status'] as String,
       medicines: List<String>.from(
         (map['medicines'] as List<dynamic>),
       ),
-      note: List<Note>.from(
-        (map['note'] as List<dynamic>).map<Note>(
-          (x) => Note.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      createAt: DateTime.fromMillisecondsSinceEpoch(map['createAt'] as int),
     );
   }
 
@@ -86,33 +80,42 @@ class Prescription {
 
   @override
   String toString() {
-    return 'Prescription(idChat: $idChat, mail: $mail, name: $name, addr: $addr, Imgurl: $Imgurl, status: $status, medicines: $medicines, note: $note)';
+    return 'Prescription(id: $id, mail: $mail, name: $name, addr: $addr, imgurl: $imgurl, status: $status, medicines: $medicines, createAt: $createAt)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant Prescription other) {
     if (identical(this, other)) return true;
 
-    return other is Prescription &&
-        other.idChat == idChat &&
+    return other.id == id &&
         other.mail == mail &&
         other.name == name &&
         other.addr == addr &&
-        other.Imgurl == Imgurl &&
+        other.imgurl == imgurl &&
         other.status == status &&
         listEquals(other.medicines, medicines) &&
-        listEquals(other.note, note);
+        other.createAt == createAt;
   }
 
   @override
   int get hashCode {
-    return idChat.hashCode ^
+    return id.hashCode ^
         mail.hashCode ^
         name.hashCode ^
         addr.hashCode ^
-        Imgurl.hashCode ^
+        imgurl.hashCode ^
         status.hashCode ^
         medicines.hashCode ^
-        note.hashCode;
+        createAt.hashCode;
   }
 }
+
+Prescription dummyPres = Prescription(
+    createAt: DateTime.now(),
+    id: '',
+    mail: '',
+    name: '',
+    addr: '',
+    imgurl: '',
+    status: '',
+    medicines: []);

@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:hci_customer/models/user.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-
 import '../provider/general_provider.dart';
 import '../screens/cart/cart_screen.dart';
 import '../screens/prescription/presciption_screen.dart';
@@ -36,50 +33,16 @@ void addorInc(Drug drug, WidgetRef ref) {
   }
 }
 
+Future<String> getPreScriptionStatus(String id) async {
+  final snapshot = await db.collection('prescription').doc(id).get();
+  return snapshot.data()!['status'];
+}
+
 void sendOrder(Order order) async {
   await db.collection('orders').add(order.toMap()).then((value) {
     order.id = value.id;
     db.collection('orders').doc(value.id).update(order.toMap());
   });
-}
-
-Future<types.Room> getRoom(String id) async {
-  return await FirebaseFirestore.instance
-      .collection('ChatRooms')
-      .doc(id)
-      .get()
-      .then((value) {
-    final data = value.data()!;
-
-    var imageUrl = data['imageUrl'] as String?;
-    var name = data['name'] as String?;
-    final userIds = data['userIds'] as List<dynamic>;
-    types.User user = types.User(
-        id: FirebaseAuth.instance.currentUser!.email.toString(),
-        firstName: FirebaseAuth.instance.currentUser!.displayName.toString(),
-        imageUrl: FirebaseAuth.instance.currentUser!.photoURL.toString());
-    types.User csUser = const types.User(
-        id: 'customerSupport',
-        firstName: 'Customer Support',
-        imageUrl:
-            'https://img.favpng.com/16/23/4/customer-service-icon-png-favpng-zNxferEMTniqzgidG0Wnp2gBJ.jpg');
-    types.Room room = types.Room(
-      id: id,
-      imageUrl: imageUrl,
-      name: name,
-      type: types.RoomType.direct,
-      users: [user, csUser],
-    );
-    return room;
-  });
-}
-
-Future<String> getUserName(String mail) async {
-  return await FirebaseFirestore.instance
-      .collection('Users')
-      .doc(mail)
-      .get()
-      .then((value) => value['firstName']);
 }
 
 void updateUser(PharmacyUser u) async {

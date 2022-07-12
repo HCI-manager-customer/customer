@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -103,7 +105,7 @@ class LoginScreen extends ConsumerWidget {
         await FirebaseAuth.instance.signInWithCredential(credential);
         navKey.currentState!.popUntil((route) => route.isFirst);
       } on FirebaseAuthException catch (e) {
-        print(e);
+        log(e.toString());
       }
     }
   }

@@ -1,32 +1,37 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PharmacyUser {
   String? mail;
   String? name;
-  String? phone;
+  String? imgUrl;
   String? addr;
+  String? role;
+  String? phone;
   PharmacyUser({
-    required this.mail,
-    required this.name,
-    required this.phone,
-    required this.addr,
+    this.mail,
+    this.name,
+    this.imgUrl,
+    this.addr,
+    this.role,
+    this.phone,
   });
 
   PharmacyUser copyWith({
     String? mail,
     String? name,
-    String? phone,
+    String? imgUrl,
     String? addr,
+    String? role,
+    String? phone,
   }) {
     return PharmacyUser(
       mail: mail ?? this.mail,
       name: name ?? this.name,
-      phone: phone ?? this.phone,
+      imgUrl: imgUrl ?? this.imgUrl,
       addr: addr ?? this.addr,
+      role: role ?? this.role,
+      phone: phone ?? this.phone,
     );
   }
 
@@ -34,8 +39,10 @@ class PharmacyUser {
     return <String, dynamic>{
       'mail': mail,
       'name': name,
-      'phone': phone,
+      'imgUrl': imgUrl,
       'addr': addr,
+      'role': role,
+      'phone': phone,
     };
   }
 
@@ -43,30 +50,11 @@ class PharmacyUser {
     return PharmacyUser(
       mail: map['mail'] != null ? map['mail'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
-      phone: map['phone'] != null ? map['phone'] as String : null,
+      imgUrl: map['imgUrl'] != null ? map['imgUrl'] as String : null,
       addr: map['addr'] != null ? map['addr'] as String : null,
+      role: map['role'] != null ? map['role'] as String : null,
+      phone: map['phone'] != null ? map['phone'] as String : null,
     );
-  }
-
-  factory PharmacyUser.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-  ) {
-    final data = snapshot.data();
-    return PharmacyUser(
-      mail: data?['mail'] as String,
-      name: data?['name'] as String,
-      phone: data?['phone'] as String,
-      addr: data?['addr'] as String,
-    );
-  }
-
-  Map<String, dynamic> toFirestore() {
-    return {
-      if (name != null) "name": name,
-      if (mail != null) "mail": mail,
-      if (phone != null) "phone": phone,
-      if (addr != null) "addr": addr,
-    };
   }
 
   String toJson() => json.encode(toMap());
@@ -76,7 +64,7 @@ class PharmacyUser {
 
   @override
   String toString() {
-    return 'PharmacyUser(mail: $mail, name: $name, phone: $phone, addr: $addr)';
+    return 'pharmacyUser(mail: $mail, name: $name, imgUrl: $imgUrl, addr: $addr, role: $role, phone: $phone)';
   }
 
   @override
@@ -86,12 +74,22 @@ class PharmacyUser {
     return other is PharmacyUser &&
         other.mail == mail &&
         other.name == name &&
-        other.phone == phone &&
-        other.addr == addr;
+        other.imgUrl == imgUrl &&
+        other.addr == addr &&
+        other.role == role &&
+        other.phone == phone;
   }
 
   @override
   int get hashCode {
-    return mail.hashCode ^ name.hashCode ^ phone.hashCode ^ addr.hashCode;
+    return mail.hashCode ^
+        name.hashCode ^
+        imgUrl.hashCode ^
+        addr.hashCode ^
+        role.hashCode ^
+        phone.hashCode;
   }
 }
+
+final dummyUser =
+    PharmacyUser(mail: '', name: '', imgUrl: '', role: '', phone: '', addr: '');

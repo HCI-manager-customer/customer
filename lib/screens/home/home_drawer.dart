@@ -33,14 +33,6 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(UserProvider.state).state = FirebaseAuth.instance;
     });
-    OrderController orderController = Get.put(OrderController());
-    PreScripController preScriptController = Get.put(PreScripController());
-
-    Get.delete<OrderController>();
-    Get.delete<PreScripController>();
-
-    orderController = Get.put(OrderController());
-    preScriptController = Get.put(PreScripController());
   }
 
   int backPressCounter = 0;
@@ -92,7 +84,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
       case MenuItems.orders:
         return const OrderHistoryScreen();
       case MenuItems.prescrip:
-        return PresciptionHistoryScree();
+        return const PresciptionHistoryScreen();
       default:
         return const HomeScreen();
     }

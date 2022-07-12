@@ -25,9 +25,11 @@ class OrderService {
     return _order
         .where('user.mail', isEqualTo: FirebaseAuth.instance.currentUser!.email)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) {
-              final f = Order.fromMap(doc.data() as dynamic);
-              return f;
-            }).toList());
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final f = Order.fromMap(doc.data() as dynamic);
+        return f;
+      }).toList();
+    });
   }
 }

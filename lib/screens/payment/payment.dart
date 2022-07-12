@@ -27,7 +27,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   var nameCtl = TextEditingController();
   var phoneCtl = TextEditingController();
 
-  String dropValue = 'Cash on Delivery';
+  String dropValue = 'Cash';
 
   final u = FirebaseAuth.instance.currentUser!;
 
@@ -246,19 +246,31 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                                 items: const [
                                   DropdownMenuItem(
                                     value: 'Momo',
-                                    child: Text('Momo'),
+                                    child: Text(
+                                      'Momo',
+                                      style: TextStyle(color: Colors.pink),
+                                    ),
                                   ),
                                   DropdownMenuItem(
-                                    value: 'Cash on Delivery',
-                                    child: Text('Cash on Delivery'),
+                                    value: 'Cash',
+                                    child: Text(
+                                      'Cash on Delivery',
+                                      style: TextStyle(color: Colors.green),
+                                    ),
                                   ),
                                   DropdownMenuItem(
                                     value: 'Zalo Pay',
-                                    child: Text('Zalo Pay'),
+                                    child: Text(
+                                      'Zalo Pay',
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
                                   ),
                                   DropdownMenuItem(
                                     value: 'Bank',
-                                    child: Text('Bank'),
+                                    child: Text(
+                                      'Bank',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
                                   ),
                                 ],
                               ),

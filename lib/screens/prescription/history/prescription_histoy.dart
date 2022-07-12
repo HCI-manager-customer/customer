@@ -6,8 +6,27 @@ import 'package:hci_customer/models/prescription.dart';
 
 import 'prescription_history_tile.dart';
 
-class PresciptionHistoryScree extends StatelessWidget {
-  PresciptionHistoryScree({Key? key}) : super(key: key);
+class PresciptionHistoryScreen extends StatefulWidget {
+  const PresciptionHistoryScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PresciptionHistoryScreen> createState() =>
+      _PresciptionHistoryScreenState();
+}
+
+class _PresciptionHistoryScreenState extends State<PresciptionHistoryScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Get.put(PreScripController());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<PreScripController>();
+  }
 
   final List<Prescription> list = [];
 

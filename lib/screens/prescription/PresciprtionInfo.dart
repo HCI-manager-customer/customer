@@ -116,22 +116,29 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
   }
 
   Future uploadImg() async {
+    String name = FirebaseAuth.instance.currentUser!.displayName.toString();
+    String mail = FirebaseAuth.instance.currentUser!.email.toString();
     SendPresciprClass(ref.watch(ImgPath)).myAsyncMethod(context, (value) {
-      Note note =
-          Note(msg: '>Posted a Drug Prescription', time: DateTime.now());
+      Note note = Note(
+        msg: '>Posted a Drug Prescription',
+        time: DateTime.now(),
+        mail: mail,
+        name: name,
+      );
       if (noteCtl.text.isNotEmpty) {
         note.msg = '>${noteCtl.text}';
       }
       final prescrip = Prescription(
-        idChat: '1',
+        id: '1',
         name: nameCtl.text,
         addr: addrCtl.text,
         mail: FirebaseAuth.instance.currentUser!.email.toString(),
-        Imgurl: value,
+        imgurl: value,
         medicines: [],
         status: 'pending',
-        note: [note],
+        createAt: DateTime.now(),
       );
+
       if (!mounted) return;
       if (value.length > 10) {
         uploadPrescipInfo(prescrip);
@@ -144,11 +151,17 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
 
   Future<void> uploadPrescipInfo(Prescription prescrip) async {
     await db.collection('prescription').add(prescrip.toMap()).then((value) {
-      prescrip.idChat = value.id;
-      db.collection('prescription').doc(value.id).update(
-            prescrip.toMap(),
-          );
+      prescrip.id = value.id;
+      db.collection('prescription').doc(value.id).update(prescrip.toMap());
     });
+    Note note = Note(
+        name: FirebaseAuth.instance.currentUser!.displayName.toString(),
+        msg: 'Posted a Drug Prescription',
+        time: DateTime.now(),
+        mail: FirebaseAuth.instance.currentUser!.email.toString());
+    await db.collection('prescription').doc(prescrip.id).collection('note').add(
+          note.toMap(),
+        );
   }
 }
 

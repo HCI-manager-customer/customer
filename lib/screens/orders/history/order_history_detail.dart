@@ -176,7 +176,7 @@ class timelineOrder extends StatelessWidget {
   List<Widget> timeLine() {
     List<IndicatorStyle> list;
     List<LineStyle> listLine;
-    if (status == 'NewOrder') {
+    if (status == 'Accept Order') {
       list = [current(), notHere(), notHere()];
       listLine = [lineNot(), lineNot(), lineNot(), lineNot()];
     } else if (status == 'Shipping') {

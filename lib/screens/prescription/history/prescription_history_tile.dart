@@ -9,6 +9,7 @@ import 'package:hci_customer/screens/prescription/history/chat/chat_screen.dart'
 import 'package:hci_customer/screens/prescription/history/rec_drug_tile.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../addons/popup.dart';
 import '../../../models/global.dart';
 import '../../../models/note.dart';
 import '../../../provider/general_provider.dart';
@@ -32,29 +33,11 @@ class PresciptionHistoryTile extends StatelessWidget {
       isMed = true;
       haveMed = 'Check Medicine List';
     }
-    List<Note> msg = [];
-    if ((preS.note.length > 2)) {
-      msg.add(preS.note[preS.note.length - 3]);
-      msg.add(preS.note[preS.note.length - 2]);
-      msg.add(preS.note[preS.note.length - 1]);
-    } else if (preS.note.length > 1) {
-      msg.add(preS.note[preS.note.length - 2]);
-      msg.add(preS.note[preS.note.length - 1]);
-    } else if (preS.note.isNotEmpty) {
-      msg.add(preS.note[preS.note.length - 1]);
-    } else {
-      msg.add(Note(msg: 'No Note', time: DateTime.now()));
-    }
-
-    if (preS.note.last.msg.startsWith('*/*')) {
-      isEnded = true;
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: InkWell(
         onTap: () {
-          Get.to(() => ChatScreen(preS.idChat, isEnded));
+          Get.to(() => ChatScreen(preS.id, isEnded));
         },
         child: Container(
           decoration: BoxDecoration(
@@ -64,20 +47,25 @@ class PresciptionHistoryTile extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                leading: CachedNetworkImage(
-                  height: 200,
-                  imageUrl: preS.Imgurl,
-                  placeholder: (_, url) => Lottie.asset(
-                    'assets/json-gif/image-loading.json',
-                    height: 100,
-                    alignment: Alignment.center,
+                leading: GestureDetector(
+                  onTap: () => popUpImage(preS.imgurl, ''),
+                  child: CachedNetworkImage(
+                    height: 200,
+                    width: Get.width * 0.2,
                     fit: BoxFit.fill,
-                  ),
-                  errorWidget: (_, url, er) => Lottie.asset(
-                    'assets/json-gif/image-loading.json',
-                    alignment: Alignment.center,
-                    height: 100,
-                    fit: BoxFit.fill,
+                    imageUrl: preS.imgurl,
+                    placeholder: (_, url) => Lottie.asset(
+                      'assets/json-gif/image-loading.json',
+                      height: 100,
+                      alignment: Alignment.center,
+                      fit: BoxFit.fill,
+                    ),
+                    errorWidget: (_, url, er) => Lottie.asset(
+                      'assets/json-gif/image-loading.json',
+                      alignment: Alignment.center,
+                      height: 100,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 title: Text(
@@ -98,25 +86,6 @@ class PresciptionHistoryTile extends StatelessWidget {
                   ),
                 ),
               ),
-              const Divider(),
-              if (preS.note.last.msg.startsWith('*/*'))
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'Support for this prescription has ended!',
-                  ),
-                ),
-              if (!preS.note.last.msg.startsWith('*/*'))
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      ...msg.map((e) => noteText(e)),
-                    ],
-                  ),
-                ),
-              const SizedBox(height: 10)
             ],
           ),
         ),
@@ -146,8 +115,13 @@ class PresciptionHistoryTile extends StatelessWidget {
               textConfirm: 'Clear Cart',
               onConfirm: () {
                 ref.read(cartLProvider).clear();
-                Get.snackbar('Cart Cleared', 'Your cart is now empty');
                 Get.back();
+                Get.snackbar(
+                  'Cart Cleared',
+                  'Your cart is now empty',
+                  backgroundColor: Colors.green,
+                  colorText: Colors.white,
+                );
               },
               confirmTextColor: Colors.white,
             );

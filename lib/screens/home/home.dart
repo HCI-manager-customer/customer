@@ -14,10 +14,27 @@ import 'smallGrid.dart';
 import '../drug/load_more/load_more.dart';
 import '../misc/search_dialog.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen();
 
   static const routeName = 'home';
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Get.put(DrugController());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<DrugController>();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -80,12 +80,21 @@ void showAddedMsg(BuildContext context, Drug drug, WidgetRef ref) {
   );
 }
 
-void sendMsgChat(String idChat, String msg) {
+Future sendMsgChat(String idChat, String msg) async {
   try {
-    FirebaseFirestore.instance.collection('prescription').doc(idChat).update({
-      "note":
-          FieldValue.arrayUnion([Note(msg: msg, time: DateTime.now()).toMap()])
-    });
+    Note note = Note(
+      msg: msg,
+      time: DateTime.now(),
+      mail: FirebaseAuth.instance.currentUser!.email.toString(),
+      name: FirebaseAuth.instance.currentUser!.displayName.toString(),
+    );
+    await FirebaseFirestore.instance
+        .collection('prescription')
+        .doc(idChat)
+        .collection('note')
+        .add(
+          note.toMap(),
+        );
   } on Exception catch (e) {
     print(e);
   }

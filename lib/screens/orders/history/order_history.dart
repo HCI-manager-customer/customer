@@ -16,6 +16,18 @@ class OrderHistoryScreen extends StatefulWidget {
 }
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Get.put(OrderController());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<OrderController>();
+  }
+
   List<Order> list = [];
   @override
   Widget build(BuildContext context) {
