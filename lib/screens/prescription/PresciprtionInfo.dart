@@ -120,7 +120,8 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
     String mail = FirebaseAuth.instance.currentUser!.email.toString();
     SendPresciprClass(ref.watch(ImgPath)).myAsyncMethod(context, (value) {
       Note note = Note(
-        msg: '>Posted a Drug Prescription',
+        patient: mail,
+        msg: 'Posted a Drug Prescription',
         time: DateTime.now(),
         mail: mail,
         name: name,
@@ -155,6 +156,7 @@ class _PrescriptionInfoState extends ConsumerState<PrescriptionInfo> {
       db.collection('prescription').doc(value.id).update(prescrip.toMap());
     });
     Note note = Note(
+        patient: prescrip.mail,
         name: FirebaseAuth.instance.currentUser!.displayName.toString(),
         msg: 'Posted a Drug Prescription',
         time: DateTime.now(),

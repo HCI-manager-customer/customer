@@ -83,6 +83,7 @@ void showAddedMsg(BuildContext context, Drug drug, WidgetRef ref) {
 Future sendMsgChat(String idChat, String msg) async {
   try {
     Note note = Note(
+      patient: FirebaseAuth.instance.currentUser!.email.toString(),
       msg: msg,
       time: DateTime.now(),
       mail: FirebaseAuth.instance.currentUser!.email.toString(),

@@ -8,11 +8,13 @@ class Note {
   DateTime time;
   String mail;
   String name;
+  String patient;
   Note({
     required this.msg,
     required this.time,
     required this.mail,
     required this.name,
+    required this.patient,
   });
 
   Note copyWith({
@@ -20,12 +22,14 @@ class Note {
     DateTime? time,
     String? mail,
     String? name,
+    String? patient,
   }) {
     return Note(
       msg: msg ?? this.msg,
       time: time ?? this.time,
       mail: mail ?? this.mail,
       name: name ?? this.name,
+      patient: patient ?? this.patient,
     );
   }
 
@@ -35,6 +39,7 @@ class Note {
       'time': time,
       'mail': mail,
       'name': name,
+      'patient': patient,
     };
   }
 
@@ -44,6 +49,7 @@ class Note {
       time: (map['time'] as Timestamp).toDate(),
       mail: map['mail'] as String,
       name: map['name'] as String,
+      patient: map['patient'] as String,
     );
   }
 
@@ -54,7 +60,7 @@ class Note {
 
   @override
   String toString() {
-    return 'Note(msg: $msg, time: $time, mail: $mail, name: $name)';
+    return 'Note(msg: $msg, time: $time, mail: $mail, name: $name, patient: $patient)';
   }
 
   @override
@@ -64,11 +70,16 @@ class Note {
     return other.msg == msg &&
         other.time == time &&
         other.mail == mail &&
-        other.name == name;
+        other.name == name &&
+        other.patient == patient;
   }
 
   @override
   int get hashCode {
-    return msg.hashCode ^ time.hashCode ^ mail.hashCode ^ name.hashCode;
+    return msg.hashCode ^
+        time.hashCode ^
+        mail.hashCode ^
+        name.hashCode ^
+        patient.hashCode;
   }
 }

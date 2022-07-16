@@ -109,17 +109,14 @@ class _MainAppBuilderState extends ConsumerState<MainAppBuilder> {
 
   Future<void> checkExist(PharmacyUser u) async {
     final userCollection = db.collection('users');
-    await userCollection.get().then((value) {
-      for (var e in value.docs) {
-        if (e.data()['mail'] == u.mail) {
-          userCollection.doc(u.mail).get().then((doc) {
-            u = ref.read(pharmacyUserProvider.notifier).state =
-                PharmacyUser.fromMap(doc.data() as Map<String, dynamic>);
-          });
-          return;
-        }
+    await userCollection.doc(u.mail).get().then((doc) {
+      if (doc.exists) {
+        u = PharmacyUser.fromMap(doc.data() as Map<String, dynamic>);
+        ref.read(pharmacyUserProvider.notifier).state = u;
+      } else {
+        userCollection.doc(u.mail).set(u.toMap());
+        ref.read(pharmacyUserProvider.notifier).state = u;
       }
-      userCollection.doc(u.mail).set(u.toMap());
     });
   }
 

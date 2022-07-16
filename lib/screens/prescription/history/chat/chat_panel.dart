@@ -35,7 +35,6 @@ class ChatPanel extends StatelessWidget {
   }
 
   Widget _buildChat(List<Note> notes) {
-    String name = FirebaseAuth.instance.currentUser!.displayName.toString();
     String mail = FirebaseAuth.instance.currentUser!.email.toString();
     return ListView.builder(
       itemCount: notes.length,
