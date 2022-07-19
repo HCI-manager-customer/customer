@@ -26,28 +26,6 @@ class OrderHistoryDetail extends StatelessWidget {
         centerTitle: true,
         title: const Text('Your Order'),
         actions: [
-          PopupMenuButton(
-              icon: const Icon(Icons.sort),
-              itemBuilder: (_) {
-                return [
-                  const PopupMenuItem(
-                    value: 'cancel',
-                    child: Text('Sort By Date (ASC)'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'cancel',
-                    child: Text('Sort By Date (DESC)'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'cancel',
-                    child: Text('Sort By Name (ASC)'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'cancel',
-                    child: Text('Sort By Name (DESC)'),
-                  ),
-                ];
-              }),
           PopupMenuButton(onSelected: (value) {
             if (value == 'cancel') {
               Get.snackbar(
@@ -93,22 +71,23 @@ class OrderHistoryDetail extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                builder: (_, snap) {
-                  if (snap.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    final data = snap.data!.data()!;
-                    print(data['status']);
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: timelineOrder(data['status'])),
-                    );
-                  }
-                },
-                stream: stream),
+              builder: (_, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  final data = snap.data!.data()!;
+                  print(data['status']);
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Center(child: timelineOrder(data['status'])),
+                  );
+                }
+              },
+              stream: stream,
+            ),
             Flexible(
               child: ListView(
                 children:
@@ -165,6 +144,19 @@ class timelineOrder extends StatelessWidget {
     );
   }
 
+  IndicatorStyle cancel() {
+    return IndicatorStyle(
+      width: 60,
+      color: Colors.transparent,
+      padding: const EdgeInsets.all(8),
+      iconStyle: IconStyle(
+        fontSize: 40,
+        color: Colors.grey,
+        iconData: Icons.highlight_remove,
+      ),
+    );
+  }
+
   LineStyle linePass() {
     return const LineStyle(color: Colors.green);
   }
@@ -176,12 +168,15 @@ class timelineOrder extends StatelessWidget {
   List<Widget> timeLine() {
     List<IndicatorStyle> list;
     List<LineStyle> listLine;
-    if (status == 'Accept Order') {
+    if (status == 'Accept Order' || status == 'NewOrder') {
       list = [current(), notHere(), notHere()];
       listLine = [lineNot(), lineNot(), lineNot(), lineNot()];
     } else if (status == 'Shipping') {
       list = [passHere(), current(), notHere()];
       listLine = [linePass(), linePass(), lineNot(), lineNot()];
+    } else if (status == 'Cancel') {
+      list = [cancel(), cancel(), cancel()];
+      listLine = [lineNot(), lineNot(), lineNot(), lineNot()];
     } else {
       list = [passHere(), passHere(), passHere()];
       listLine = [linePass(), linePass(), linePass(), linePass()];

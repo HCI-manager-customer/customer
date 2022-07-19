@@ -40,6 +40,30 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           onPressed: () => ZoomDrawer.of(context)!.toggle(),
           icon: const Icon(Icons.menu_rounded),
         ),
+        actions: [
+          PopupMenuButton(
+              icon: const Icon(Icons.sort),
+              itemBuilder: (_) {
+                return [
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Date (ASC)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Date (DESC)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Name (ASC)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'cancel',
+                    child: Text('Sort By Name (DESC)'),
+                  ),
+                ];
+              }),
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(

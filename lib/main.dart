@@ -49,7 +49,6 @@ Future main() async {
     ),
   );
   Get.put(NotificationController());
-  // Get.put(DrugController());
   runApp(const ProviderScope(child: MyApp()));
 }
 

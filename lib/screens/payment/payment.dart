@@ -293,7 +293,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
               ],
             ),
           ),
-          BtnConfirmOrder(price),
+          BtnConfirmOrder(dropValue, price),
         ],
       ),
     );

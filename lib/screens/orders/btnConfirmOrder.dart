@@ -9,9 +9,10 @@ import '../../provider/general_provider.dart';
 import '../payment/payment_complete.dart';
 
 class BtnConfirmOrder extends ConsumerWidget {
-  const BtnConfirmOrder(this.price);
+  const BtnConfirmOrder(this.method, this.price);
 
   final double price;
+  final String method;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,6 +32,7 @@ class BtnConfirmOrder extends ConsumerWidget {
                   Order order = Order(
                     id: '',
                     user: user,
+                    method: method,
                     listCart: list,
                     price: price,
                     status: 'NewOrder',

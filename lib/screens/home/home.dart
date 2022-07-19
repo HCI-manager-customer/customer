@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Get.put(DrugController());
+    Get.put(DrugController(), permanent: true);
   }
 
   @override

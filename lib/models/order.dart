@@ -11,7 +11,8 @@ class Order {
   String id;
   PharmacyUser user;
   List<Cart> listCart;
-  double price;
+  num price;
+  String method;
   String status;
   DateTime date;
   Order({
@@ -19,6 +20,7 @@ class Order {
     required this.user,
     required this.listCart,
     required this.price,
+    required this.method,
     required this.status,
     required this.date,
   });
@@ -27,7 +29,8 @@ class Order {
     String? id,
     PharmacyUser? user,
     List<Cart>? listCart,
-    double? price,
+    num? price,
+    String? method,
     String? status,
     DateTime? date,
   }) {
@@ -36,6 +39,7 @@ class Order {
       user: user ?? this.user,
       listCart: listCart ?? this.listCart,
       price: price ?? this.price,
+      method: method ?? this.method,
       status: status ?? this.status,
       date: date ?? this.date,
     );
@@ -47,6 +51,7 @@ class Order {
       'user': user.toMap(),
       'listCart': listCart.map((x) => x.toMap()).toList(),
       'price': price,
+      'method': method,
       'status': status,
       'date': date.millisecondsSinceEpoch,
     };
@@ -61,7 +66,8 @@ class Order {
           (x) => Cart.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      price: map['price'] as double,
+      price: map['price'] as num,
+      method: map['method'] as String,
       status: map['status'] as String,
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
     );
@@ -74,18 +80,18 @@ class Order {
 
   @override
   String toString() {
-    return 'Order(id: $id, user: $user, listCart: $listCart, price: $price, status: $status, date: $date)';
+    return 'Order(id: $id, user: $user, listCart: $listCart, price: $price, method: $method, status: $status, date: $date)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant Order other) {
     if (identical(this, other)) return true;
 
-    return other is Order &&
-        other.id == id &&
+    return other.id == id &&
         other.user == user &&
         listEquals(other.listCart, listCart) &&
         other.price == price &&
+        other.method == method &&
         other.status == status &&
         other.date == date;
   }
@@ -96,6 +102,7 @@ class Order {
         user.hashCode ^
         listCart.hashCode ^
         price.hashCode ^
+        method.hashCode ^
         status.hashCode ^
         date.hashCode;
   }
